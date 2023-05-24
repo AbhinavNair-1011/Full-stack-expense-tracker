@@ -1,0 +1,199 @@
+*{
+    margin:0;
+    padding:0
+}
+body{
+    background-color: rgb(25, 230, 161);
+}
+h1{
+    text-align: center;
+    font-size: 3.3em;
+    margin:10px;
+    padding:10px;
+    text-shadow: 1px 4px 10px ;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    letter-spacing: 16px;;
+}
+
+#mainDiv{
+    
+    margin-top:100px;
+    display:flex;
+    flex-direction: column;
+          
+}
+#registerLogin{
+
+    align-self:center;
+    box-shadow: 0 0 4px  black;
+    width:500px;
+    display: flex;
+    justify-content: space-between;
+    box-shadow: 0 1px 4px 1px black;
+   
+    
+}
+.registerLoginButton{
+    background-color:bisque;
+    width:180px;
+    height: 30px;
+    box-shadow: 0 0 4px 0 black;
+    border: 0.5;
+    font-size:1.1em;
+   cursor: pointer;
+    
+   }
+   input[type="submit"]{
+    cursor: pointer;
+   }
+  
+  
+#forms{
+    display: flex;
+    position: relative;
+    justify-content: center;
+    /* width:100%; */
+    
+}
+#registerForm{
+   background-color: rgb(236, 234, 234);
+   padding:10px;
+   position:absolute;   
+   z-index: 1;
+   width:500px;
+   box-shadow: 0 0 4px 0 black;
+   transition: opacity 0.4s ease-in;
+   min-width:200px;
+     
+}
+#registerForm:hover{
+    box-shadow: 0 0 10px 2px black;
+   
+}
+
+
+#loginForm{
+    background-color:rgb(236, 234, 234);
+    padding:10px;
+    position:absolute;
+    width:500px;
+    min-height: 286px;
+    z-index: 0;
+display:flex;
+flex-direction: column;
+justify-content: center;
+box-shadow:0 0  4px 0 black; 
+transition:opacity 0.4s ease-in;
+
+
+}
+
+#loginForm:hover{
+    box-shadow: 0 0 10px 2px black;
+
+}
+
+.inputWrap{
+    padding:8px;
+    margin:10px;
+    display:flex;
+    justify-content:space-between;
+    align-items: center;
+    background-color: rgba(0, 0, 255, 0.274);
+    border-radius: 30px 0;
+}
+
+.inputWrap:hover{
+    box-shadow:0 0 3px 1px  rgba(0, 0, 255, 0.274);
+}
+input:hover{
+    box-shadow:0 0 3px  black;
+}
+
+
+
+#loginSubmitWrap , #registerSubmitWrap{
+justify-content:center;
+background-color: rgba(77, 231, 180, 0.199)!important;
+
+}
+#registerSubmitWrap:hover ,#loginSubmitWrap:hover{
+    box-shadow:0 0  0  rgba(0, 0, 255, 0.274);
+  
+
+}
+label{
+    font-size: 1.1em;
+}
+input{
+width:260px;
+height:25px;
+border-radius: 30px 0;
+padding-left:10px;
+
+}
+#register{
+    width:40%;
+    height: 30px;
+    background-color: rgba(240, 248, 255, 0.575);
+}
+#login{
+    width:40%;
+    height: 30px;
+    background-color: rgba(240, 248, 255, 0.575);
+    
+
+}
+
+
+
+
+#loginShift:active{
+background-color: rgb(197, 196, 130);
+}
+#registerShift:active{
+    background-color: rgb(197, 196, 130);
+    }
+    #register:active{
+        background-color: rgb(197, 196, 130);
+        }
+        #login:active{
+            background-color: rgb(197, 196, 130);
+            }
+
+
+            @media(max-width:540px){
+
+                #mainDiv{
+                  
+                    margin-top:50px;
+                }
+                h1{
+                    font-size: 3em;
+                }
+                #registerLogin{
+                    width:80%;
+                }
+                
+                .registerLoginButton{
+                    width:35%;
+                }
+                #loginForm{
+                    width:90%;
+                }
+                #registerForm{
+                    width:90%;
+                }
+            }
+
+            @media(max-width:315px){
+                h1{
+                    font-size: 2.9em;
+                }
+                .inputWrap{
+                    font-size: 0.8em;
+                }
+                input{
+                    overflow-x: hidden;
+                }
+            }
