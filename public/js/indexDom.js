@@ -215,8 +215,12 @@ window.addEventListener("DOMContentLoaded", () => {
 
             validateUser(userDetails)
             .then(result=>{
+                
                 if(result.data.authentication===true){
-
+                    
+                 localStorage.setItem("name",result.data.data[0]);
+                  localStorage.setItem("email",result.data.data[1]);
+                     window.location.href="../../views/mainPage.html"
 
 
                 }else if(result.data.authentication===false){

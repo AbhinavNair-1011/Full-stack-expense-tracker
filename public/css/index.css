@@ -4,10 +4,12 @@
 }
 
 body {
-    background-color: whitesmoke;
+    background-color: rgb(5, 0, 0);
+    font-weight: bolder;
 }
 
 h1 {
+    color:rgb(15, 252, 240);
     text-align: center;
     font-size: 3.3em;
     margin: 10px;
@@ -39,7 +41,8 @@ h1 {
 }
 
 .registerLoginButton {
-    background-color: bisque;
+    background-color: rgb(15, 252, 240);
+    border-radius: 30px 0;
     width: 180px;
     height: 30px;
     box-shadow: 0 0 4px 0 black;
@@ -47,6 +50,13 @@ h1 {
     font-size: 1.1em;
     cursor: pointer;
 
+}
+.registerLoginButton:hover{
+    box-shadow: 0 0 7px rgb(15, 252, 240);
+}
+#registerShift{
+
+    border-radius: 0 30px;
 }
 
 input[type="submit"] {
@@ -63,7 +73,7 @@ input[type="submit"] {
 }
 
 #registerForm {
-    background-color: rgb(236, 234, 234);
+    background-color: rgba(4, 221, 241, 0.625);
     padding: 10px;
     position: absolute;
     z-index: 1;
@@ -75,18 +85,19 @@ input[type="submit"] {
 }
 
 #registerForm:hover {
-    box-shadow: 0 0 10px 2px black;
+    box-shadow: 0 0 10px 2px rgb(15, 252, 240);
 
 }
 
 
 #loginForm {
-    background-color: rgb(236, 234, 234);
+    background-color: rgba(4, 221, 241, 0.625);
     padding: 10px;
     position: absolute;
     width: 500px;
     min-height: 286px;
     z-index: 0;
+    opacity:0;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -97,7 +108,7 @@ input[type="submit"] {
 }
 
 #loginForm:hover {
-    box-shadow: 0 0 10px 2px black;
+    box-shadow: 0 0 10px 2px rgb(15, 252, 240);
 
 }
 
@@ -107,16 +118,16 @@ input[type="submit"] {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: rgba(0, 0, 255, 0.274);
+    background-color: rgba(6, 240, 228, 0.11);
     border-radius: 30px 0;
 }
 
 .inputWrap:hover {
-    box-shadow: 0 0 3px 1px rgba(0, 0, 255, 0.274);
+    box-shadow: 0 0 3px 1px rgb(15, 252, 240);
 }
 
-input:hover {
-    box-shadow: 0 0 3px black;
+#register:hover {
+    box-shadow: 0 0 3px rgb(15, 252, 240);
 }
 
 
@@ -136,7 +147,8 @@ input:hover {
 }
 
 label {
-    font-size: 1.1em;
+    font-size: 0.95em;
+    color: white;
 }
 
 input {
@@ -144,6 +156,8 @@ input {
     height: 25px;
     border-radius: 30px 0;
     padding-left: 10px;
+    background-color: rgba(0, 255, 255, 0.465);
+    font-size:14px;
 
 }
 
@@ -182,7 +196,7 @@ input {
 
 
 .duplicateEntry {
-    color: red;
+    color: #fffb06;
     font-size: 14px;
    min-width:400px;
    text-align:start;
@@ -193,7 +207,7 @@ input {
 }
 
 .loginDuplicateEntry{
-    color: red;
+    color: #fffb06;
     font-size: 14px;
    width:130px;
    text-align:start;

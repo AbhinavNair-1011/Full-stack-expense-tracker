@@ -1,4 +1,4 @@
-const controller=require("../controller/addUserController");
+const controller=require("../controllers/addUserController");
 const router=require("express").Router();
 
 router.post("/api/add-user",controller.addUser)

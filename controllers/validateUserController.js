@@ -3,7 +3,7 @@ const {users,Users}=require("../models/users");
 const bcrypt=require("bcrypt")
 
 module.exports.validateUser=(req,res,next)=>{
-    console.log(req.body.password);
+    
     
    
     Users.validateUser(req.body)
@@ -14,12 +14,13 @@ module.exports.validateUser=(req,res,next)=>{
                     return "error"
                 }else{
                if(authorization===true){
+           
                 return res.status(200).json({
 
                     status:"successfull",
-                    data:result.dataValues.email,
-                     user:"found",
-                     authentication:true
+                    data:[result.dataValues.name,result.dataValues.email],
+                    user:"found",
+                    authentication:true
                 })
                }else{
                 return res.status(200).json({

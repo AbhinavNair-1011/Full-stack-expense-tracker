@@ -1,0 +1,176 @@
+body{
+    /* background-image: url(a.png); */
+    background-size:cover;
+    background-repeat:no-repeat;
+    background-color: black;
+    
+    
+}
+#headingDiv {
+   
+    text-align: center;
+   
+   
+
+}
+#heading{
+    color:rgb(15, 252, 240);
+    text-align: center;
+    font-size: 3.3em;
+    margin: 10px;
+    padding: 10px;
+    text-shadow: 1px 4px 10px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    letter-spacing: 16px;
+    font-weight: bold
+    ;
+}
+.profile{
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+}
+#userName{
+    /* background-color: rgb(9, 100, 100); */
+    color:bisque
+
+}
+#editProfile{
+/* background-color: rgb(9, 100, 100); */
+margin-left:10px;
+color:bisque
+}
+#inputSectionDiv{
+ background-color: rgba(6, 240, 228, 0.5);
+
+ 
+    
+    margin-bottom:15px;
+   
+}
+#inputForm{
+    padding:5px;
+    font-family: bold;
+    
+ 
+   
+     
+}
+#inputSectionDiv:hover{
+    box-shadow: 0 0 7px  rgb(15, 252, 240);
+}
+.edit,.delete{
+    color:rgb(3, 0, 0);
+}
+.total{
+    
+/* white-Space:"pre"; */
+
+font-size: 25px;;
+ color:rgb(138, 0, 23);
+font-Weight:"bold";
+margin:0;
+text-align: center;
+list-style-type: none;
+font-family: "Hanalei Fill";
+
+}
+.form-label{
+    display: flex;
+    align-items: center;
+}
+#expenseLabel{
+   background-color: rgba(6, 240, 228, 0.11); 
+   color:white;
+   font-family: "Hanalei Fill";
+   justify-content: center;
+}
+#expenseLabel2{
+    background-color: rgba(6, 240, 228, 0.123); 
+    color: white;
+    font-family: "Hanalei Fill";
+    justify-content: center;
+ }
+.row{
+   margin-top:30px;
+   font-size: 20px;
+
+}
+.form-control:hover{
+    box-shadow: 0 0 5px  rgb(15, 252, 240);
+}
+#submitBtn:hover{
+    box-shadow: 0 0 3px  rgb(15, 252, 240);
+}
+#expensePrice , #expenseInput{
+    background-color:rgba(0, 255, 255, 0.465);
+    height:28px;
+    width:350px;
+    font-family: 'Courier New', Courier, monospace;
+    color:rgb(0, 0, 0);
+    font-size: 18px;
+    font-weight: bold;
+   
+}
+#submitDiv{
+   justify-content: center;
+   font-family: "Hanalei Fill";
+}
+#submitBtn{
+width:90px;
+background-color: rgba(6, 240, 228, 0.692) !important;
+color:white
+
+}
+#inputForm{
+    position:relative;
+}
+.deleteBtn{
+    width:100px;
+    height:30px;
+    position:absolute;
+    bottom:10px;
+    right:0;
+    font-size: 15px;
+}
+
+.value{
+background-color: rgba(6, 240, 228, 0.329);
+margin-top:3px;
+color:white;
+list-style-type: none;
+font-family:'Courier New';
+font-size: 16px !important;
+/* height: 100px !important; */
+
+
+}
+.value:hover{
+    box-shadow: 0 0 5px  rgb(217, 255, 1);
+}
+span{
+    color:aqua
+    
+}
+.col-2{
+     justify-self: start;
+}
+
+#detailsList{
+    padding:0;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+#search{
+    background-color:rgba(0, 255, 255, 0.465) ;
+    margin-bottom:15px;
+    color:white;
+    text-align: center;
+font-weight: bold;
+}
+@media(min-width:780px){
+    .value{
+ font-size: 19px !important;
+            }
+}

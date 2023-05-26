@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href='https://fonts.googleapis.com/css?family=Hanalei Fill' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Hanalei' rel='stylesheet'>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+        crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="/public/css/style.css">
+</head>
+
+<body>
+    <header id="headingTag">
+        <div id="headingDiv" class="container-xxl">
+            <h1 id="heading">EXPENSE TRACKER</h1>
+        </div>
+        <div class="profile">
+        <p id="userName">Welcome abhinav</p>
+    </div>
+    </header>
+    <main>
+        
+        <section id="inputSectionTag">
+            <div id="inputSectionDiv" class="container-sm">
+                <form action="" id="inputForm">
+
+
+                    <div class="row">
+                        <label class="form-label" id="expenseLabel" for="expenseInput">Expense Item  : <input validate class="form-control" id="expenseInput"
+                                placeholder="Expense For?" type="text"><label>
+
+                    </div>
+                    <div class="row">
+                        <label class="form-label" id="expenseLabel2" for="expensePrice">Expense Price : <input type="number"
+                                id="expensePrice" class="form-control" placeholder="Expense price?"></label>
+                    </div>
+                    <div>
+                        <div id="submitDiv" class="row">
+                            <input type="submit" name="submit" id="submitBtn" value="Submit">
+                        </div>
+
+                    </div>
+                   <!-- <div class="deleteAll">
+                    <button class="deleteBtn">Delete All</button>
+                   </div> -->
+                </form>
+
+            </div>
+
+        </section>
+        <div class="container-md p-0">
+        <input type="text" id="search" class="form-control" placeholder="SEARCH YOUR EXPENSE HERE">
+    </div>
+        <section id="detailSectionTag" >
+
+            <div id="detailsSectionDiv" class="container-fluid">
+
+                <ol id="detailsList" >
+<li class="total"></li>
+
+                </ol>
+            </div>
+        </section>
+
+    </main>
+    
+    <script src="/public/js/mainPageDom.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</body>
+
+</html>
