@@ -1,12 +1,19 @@
 const { json } = require("body-parser");
 const {users,Users}=require("../models/users");
+const bcrypt=require("bcrypt")
 
 module.exports.validateUser=(req,res,next)=>{
+    console.log(req.body.password);
+    
+   
     Users.validateUser(req.body)
     .then(result=>{
         if(result){
-           
-            if(result.dataValues.password===req.body.password){
+            bcrypt.compare(req.body.password,result.dataValues.password,(err,authorization)=>{
+                if(err){
+                    return "error"
+                }else{
+               if(authorization===true){
                 return res.status(200).json({
 
                     status:"successfull",
@@ -14,8 +21,7 @@ module.exports.validateUser=(req,res,next)=>{
                      user:"found",
                      authentication:true
                 })
-
-            }else{
+               }else{
                 return res.status(200).json({
 
                     status:"successfull",
@@ -23,7 +29,11 @@ module.exports.validateUser=(req,res,next)=>{
                      user:"found",
                      authentication:false
                 })
+               }
             }
+            })       
+        
+            
             
          
         }else{
