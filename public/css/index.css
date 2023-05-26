@@ -4,7 +4,7 @@
 }
 
 body {
-    background-color: rgb(25, 230, 161);
+    background-color: whitesmoke;
 }
 
 h1 {
@@ -181,6 +181,28 @@ input {
 }
 
 
+.duplicateEntry {
+    color: red;
+    font-size: 14px;
+   min-width:400px;
+   text-align:start;
+   padding-left:210px;   
+    margin-top: -11px;
+    margin-bottom: -10px;
+ 
+}
+
+.loginDuplicateEntry{
+    color: red;
+    font-size: 14px;
+   width:130px;
+   text-align:start;
+   padding-left:55px;   
+    margin-top: -11px;
+    margin-bottom: -10px;
+    align-self: center;
+}
+
 @media(max-width:540px) {
 
     #mainDiv {
@@ -207,9 +229,25 @@ input {
     #registerForm {
         width: 90%;
     }
+    label{
+        max-width:100px;
+        text-align: center;
+    }
+    
+.duplicateEntry {
+    color: red;
+    font-size: 14px;
+   width:440px;
+   text-align:start;
+   padding-left:190px;   
+    margin-top: -11px;
+    margin-bottom: -10px;
+ 
+}
+    
 }
 
-@media(max-width:315px) {
+@media(max-width:390px) {
     h1 {
         font-size: 2.9em;
     }
@@ -221,19 +259,25 @@ input {
     input {
         overflow-x: hidden;
     }
-}
-
-
-
-
-
-
-
+    label{
+        max-width:65px
+    }
+    
 .duplicateEntry {
     color: red;
     font-size: 14px;
-    padding-left: 170px;
-    text-align: center;
+   min-width:400px;
+   text-align:start;
+   padding-left:100px;   
     margin-top: -11px;
-    margin-bottom: -10px
+    margin-bottom: -10px;
+ 
 }
+    
+}
+
+
+
+
+
+

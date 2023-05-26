@@ -44,6 +44,14 @@ class Users{
 
         })
     }
+    static validateUser(userDetails){
+       return users.findOne({
+            where:{email:userDetails.email}
+        
+        })
+        
+        
+    }
  
 }
 
