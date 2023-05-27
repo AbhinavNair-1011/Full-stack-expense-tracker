@@ -1,3 +1,5 @@
+
+
 async function addUser(userDetails) {
     return await axios.post("http://localhost:3000/api/add-user", userDetails)
 }
@@ -215,11 +217,10 @@ window.addEventListener("DOMContentLoaded", () => {
 
             validateUser(userDetails)
             .then(result=>{
-                
+              
                 if(result.data.authentication===true){
-                    
-                 localStorage.setItem("name",result.data.data[0]);
-                  localStorage.setItem("email",result.data.data[1]);
+                    console.log(result.data.token)
+               localStorage.setItem("token",result.data.token)
                      window.location.href="../../views/mainPage.html"
 
 

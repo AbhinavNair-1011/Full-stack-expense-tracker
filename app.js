@@ -17,6 +17,7 @@ const{users}=require("./models/users")
 const{expenses}=require("./models/expenses")
 
 users.hasMany(expenses);
+expenses.belongsTo(users)
 
 
 

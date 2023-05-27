@@ -1,6 +1,6 @@
 
-async function fetchData(userEmail) {
-  return await axios.get(`http://localhost:3000/api/fetch-data/${userEmail}`);
+async function fetchData(token) {
+  return await axios.get(`http://localhost:3000/api/fetch-data`,{headers:{"authorization":token}});
   
 }
 async function addData(details) {
@@ -31,15 +31,19 @@ document.addEventListener("DOMContentLoaded", (e) => {
   let localStorageKey = [];
   let totalExpense = 0;
 
-  let userName=localStorage.getItem("name")
- let userNameParagrah=document.querySelector("#userName");
- userNameParagrah.innerText="Welcome " + userName;
-
- let userEmail=localStorage.getItem("email")
+ 
+ let token=localStorage.getItem("token")
  
  
-    fetchData(userEmail)
+ 
+    fetchData(token)
     .then((res)=>{
+details.email=res.data.email;
+
+let userName;
+let userNameParagrah=document.querySelector("#userName");
+userName=res.data.name;
+userNameParagrah.innerText="Welcome " + userName;
 
     let data=res.data.data.result
   for (each of data){
@@ -175,42 +179,52 @@ submitBtn.addEventListener("click", (e) => {
 
 
 
+
   let s = document.querySelector("#totalSpan");
   let eiValue = expenseItems.value.trim();
   let epValue = expensePrice.value.trim();
   let allList = document.querySelectorAll(".value");
 
+  let inputForm=document.querySelector("#inputForm");
 
 
 
   if (!eiValue || !epValue) {
-  //   let inputForm=document.querySelector("#inputform");
+    
 
-  //   if (eiValue) {
-  //     if (expenseItem.parentElement.nextElementSibling.className === "duplicateEntry") {
+    if (!eiValue) {
+      if (expenseItems.parentElement.parentElement.nextElementSibling.className === "duplicateEntry") {
 
-  //     } else {
-  //         let p = document.createElement("p");
-  //         p.setAttribute("class", "duplicateEntry")
-  //         p.innerHTML = "*Item name required"
-  //         inputForm.insertBefore(p, expensePrice.parentElement)
-  //     }
+      } else {
+          let p = document.createElement("p");
+          p.setAttribute("class", "duplicateEntry")
+          p.innerHTML = "*Item name required"
+          inputForm.insertBefore(p, expensePrice.parentElement.parentElement)
+      }
 
-  // }
-  // if (!epValue) {
-  //     if (expensePrice.parentElement.nextElementSibling.className === "duplicateEntry") {
+  }
+  if (!epValue) {
+      if (expensePrice.parentElement.parentElement.nextElementSibling.className === "duplicateEntry") {
 
-  //     } else {
-  //         let p = document.createElement("p");
-  //         p.setAttribute("class", "duplicateEntry")
-  //         p.innerHTML = "*Email required"
-  //         inputForm.insertBefore(p,submitBtn.parentElement)
-  //     }
+      } else {
+          let p = document.createElement("p");
+          p.setAttribute("class", "duplicateEntry")
+          p.innerHTML = "*Expense price required"
+          inputForm.insertBefore(p,submitBtn.parentElement.parentElement)
+      }
+    }
   } else if (eiValue && epValue) {
     details.expenseItem = eiValue;
     details.expensePrice = epValue;
+    
+    if (expenseItems.parentElement.parentElement.nextElementSibling.className === "duplicateEntry") {
+      inputForm.removeChild(expenseItems.parentElement.parentElement.nextElementSibling)
+    } 
+    if (expensePrice.parentElement.parentElement.nextElementSibling.className === "duplicateEntry") {
+      inputForm.removeChild(expensePrice.parentElement.parentElement.nextElementSibling)
+    } 
 
-    details.email=localStorage.getItem("email")
+    
 
     addData(details);
     
@@ -301,12 +315,30 @@ submitBtn.addEventListener("click", (e) => {
 
       };
       localStorage.setItem(obj.item, obj.price);
-      expenseItems.value = "";
-      expensePrice.value = "";
+      
     }
+    expenseItems.value = "";
+      expensePrice.value = "";
   }
+  else if(eiValue || epValue){
+    if(eiValue){
+      if (expenseItems.parentElement.parentElement.nextElementSibling.className === "duplicateEntry") {
+        inputForm.removeChild(expenseItems.parentElement.parentElement.nextElementSibling)
+    
+    
+      } 
+  }
+     if(epValue){
+      if (expensePrice.parentElement.parentElement.nextElementSibling.className === "duplicateEntry") {
+        inputForm.removeChild(expensePrice.parentElement.parentElement.nextElementSibling)
+        
+ 
+      } 
+    }
   expenseItems.value = "";
   expensePrice.value = "";
+  }
+
 
 });
 
@@ -329,7 +361,7 @@ list.addEventListener("click", (e) => {
 
     let li = e.target.parentElement;
     let itemName = e.target.parentElement.children[0].textContent;
-    let userEmail=localStorage.getItem("email")
+    let userEmail=details.email;
 
     
     deleteData(itemName,userEmail)
@@ -354,6 +386,7 @@ list.addEventListener("click", (e) => {
     });
     let newdiv = document.createElement("div");
     let updatedData={};
+    updatedData.email=details;
     let updateDataTracker=false;
 
 
@@ -400,7 +433,7 @@ list.addEventListener("click", (e) => {
 
       let flag = false;
 
-      updatedData.email=localStorage.getItem("email");
+     
 
       if (
         document.getElementById("expenseInput").value !=

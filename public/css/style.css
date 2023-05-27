@@ -94,6 +94,7 @@ font-family: "Hanalei Fill";
 .row{
    margin-top:30px;
    font-size: 20px;
+   justify-content: center;
 
 }
 .form-control:hover{
@@ -169,8 +170,45 @@ span{
     text-align: center;
 font-weight: bold;
 }
+.duplicateEntry {
+    color: #fffb06;
+    font-size: 14px;
+   min-width:400px;
+   text-align:center;
+   font-weight: lighter;
+    
+    margin-top: -11px;
+    margin-bottom: -10px;
+ 
+}
 @media(min-width:780px){
     .value{
  font-size: 19px !important;
             }
+}
+@media(max-width:517px){
+    .form-label{
+        max-width:424px;
+        font-size: 13.5px;
+    }
+    input{
+        min-width:100px;
+    }
+    .duplicateEntry{
+        min-width:100px
+    }
+    
+    
+
+}
+@media(max-width:350px){
+    #heading{
+        font-size: 2.5em !important;
+        letter-spacing:10px ;
+        margin:0;
+        padding:0;
+        margin-bottom: 30px;
+        margin-top:20px;
+    }
+   
 }

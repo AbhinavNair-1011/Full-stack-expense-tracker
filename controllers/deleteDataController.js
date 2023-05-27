@@ -11,10 +11,7 @@ module.exports.deleteData=(req,res,next)=>{
     toBeDeleted.destroy()
     return res.status(200).json({
         status:"success",
-    data:{
-        toBeDeleted
-    }
-    })
+       })
     }
     else{
        return res.status(404).json({

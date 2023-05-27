@@ -203,6 +203,7 @@ input {
    padding-left:210px;   
     margin-top: -11px;
     margin-bottom: -10px;
+    font-weight: lighter;
  
 }
 
@@ -215,6 +216,7 @@ input {
     margin-top: -11px;
     margin-bottom: -10px;
     align-self: center;
+    font-weight: lighter;
 }
 
 @media(max-width:540px) {
