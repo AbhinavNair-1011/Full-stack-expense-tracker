@@ -1,20 +1,30 @@
 
 async function fetchData(token) {
-  return await axios.get(`http://localhost:3000/api/fetch-data`,{headers:{"authorization":token}});
-  
+  return await axios.get(`http://localhost:3000/api/fetch-data`, { headers: { "authorization": token } });
+
 }
-async function addData(details) {
- return await axios.post("http://localhost:3000/api/add-data", details)
- 
+async function addData(details, token) {
+  return await axios.post("http://localhost:3000/api/add-data", details, { headers: { "authorization": token } })
+
 }
-async function deleteData(itemName,userEmail){
-  let lower=itemName.toLowerCase()
- return  await axios.delete(`http://localhost:3000/api/delete-data/${userEmail}/${lower}`)
+async function deleteData(itemName, userEmail, token,itemPrice) {
+  let lower = itemName.toLowerCase()
+  return await axios.delete(`http://localhost:3000/api/delete-data/${userEmail}/${lower}`, { headers: { "authorization": token },data:{itemPrice} })
 }
 
-async function updateData(updatedData){
-  return await axios.patch(`http://localhost:3000/api/update-data`,updatedData)
+async function updateData(updatedData, token,) {
+  return await axios.patch(`http://localhost:3000/api/update-data`, updatedData, { headers: { "authorization": token } })
 }
+async function createOrder(token) {
+  return await axios.post("http://localhost:3000/api/buy-membership/create-order", { headers: { "authorization": token } })
+}
+async function paymentDetails(details, token) {
+  return await axios.post("http://localhost:3000/api/buy-membership/payment", details, { headers: { "authorization": token } })
+}
+async function isPremiumMember(d,token){
+  return await axios.post("http://localhost:3000/api/buy-membership/validate-membership",d, { headers: { "authorization": token } })
+}
+
 document.addEventListener("DOMContentLoaded", (e) => {
   let expenseItems = document.querySelector("#expenseInput");
   let expensePrice = document.querySelector("#expensePrice");
@@ -31,120 +41,76 @@ document.addEventListener("DOMContentLoaded", (e) => {
   let localStorageKey = [];
   let totalExpense = 0;
 
- 
- let token=localStorage.getItem("token")
- 
- 
- 
-    fetchData(token)
-    .then((res)=>{
-details.email=res.data.email;
 
-let userName;
-let userNameParagrah=document.querySelector("#userName");
-userName=res.data.name;
-userNameParagrah.innerText="Welcome " + userName;
+  let token = localStorage.getItem("token")
 
-    let data=res.data.data.result
-  for (each of data){
-    
-    
-  let x = each.expenseItem.toUpperCase();
-  let y =each.expensePrice;
-  localStorageKey.push(x.toUpperCase());
-  localStorage.setItem(x,y)
- 
-  totalExpense += y
-  let editBtn = document.createElement("button");
-  let deleteBtn = document.createElement("button");
-
-  editBtn.appendChild(document.createTextNode("EDIT"));
-  deleteBtn.appendChild(document.createTextNode("DETELE"));
-  editBtn.setAttribute("class", "edit");
-  deleteBtn.setAttribute("class", "delete");
-  editBtn.style.float = "right";
-  deleteBtn.style.float = "right";
-
-  let li = document.createElement("li");
-  let span = document.createElement("span");
-
-  let span2 = document.createElement("span");
-
-  li.appendChild(document.createTextNode("Expense Item :  "));
-  span.appendChild(document.createTextNode(x));
-  li.appendChild(span);
-  li.appendChild(document.createTextNode("        Price :  "));
-
-  span2.appendChild(document.createTextNode(y));
-  li.appendChild(span2);
-
-
-
-  li.setAttribute("class", "value");
-
-  li.style.fontWeight = "bold";
-  li.style.fontSize = "21px";
-  editBtn.style.fontSize = "14px";
-  deleteBtn.style.fontSize = "14px";
-  editBtn.style.backgroundColor = "yellow";
-  deleteBtn.style.backgroundColor = "red";
-  li.appendChild(deleteBtn);
-  li.appendChild(editBtn);
-  list.appendChild(li);
-
-
-  }
-
-  let inputForm = document.querySelector("#inputForm");
-  
-
-  
   let t = document.createElement("p");
   let span4 = document.createElement("span");
-  span4.innerText = totalExpense;
   span4.setAttribute("id", "totalSpan");
-  
   t.setAttribute("class", "total");
-  t.appendChild(document.createTextNode("Total Expense : "));
-  t.appendChild(span4);
-  inputForm.appendChild(t);
 
-    })
-    .catch(err=>{
-  
-      for (let i = 0; i < localStorage.length; i++) {
-        let x = localStorage.key(i);
-        localStorageKey.push(x.toUpperCase());
-        let y = localStorage.getItem(x);
-        totalExpense += Number(y);
+
+  isPremiumMember("d",token)
+  .then(res=>{
+    if(!res.data.isPremiumMember){
+      let razorPay=document.querySelector("#razorPay");
+      razorPay.style.display="unset";
+    }
+  })
+  .catch(err=>console.log(err))
+
+  fetchData(token)
+    .then((res) => {
+
+     
+      details.email = res.data.email;
+
+      let userName;
+      let userNameParagrah = document.querySelector("#userName");
+      userName = res.data.name;
+      userNameParagrah.innerText = "Welcome " + userName;
+
+      let data = res.data.data.result
+      for (each of data) {
+
+
+        let x = each.expenseItem.toUpperCase();
+        let y = each.expensePrice;
+
+        let createdAt=new Date(each.createdAt);
+        let date=createdAt.toLocaleDateString();
+
+
+        totalExpense += y
         let editBtn = document.createElement("button");
         let deleteBtn = document.createElement("button");
-      
+
         editBtn.appendChild(document.createTextNode("EDIT"));
         deleteBtn.appendChild(document.createTextNode("DETELE"));
         editBtn.setAttribute("class", "edit");
         deleteBtn.setAttribute("class", "delete");
         editBtn.style.float = "right";
         deleteBtn.style.float = "right";
-      
+
         let li = document.createElement("li");
         let span = document.createElement("span");
-      
         let span2 = document.createElement("span");
-      
+        let dateSpan=document.createElement("span");      
+       
         li.appendChild(document.createTextNode("Expense Item :  "));
         span.appendChild(document.createTextNode(x));
         li.appendChild(span);
         li.appendChild(document.createTextNode("        Price :  "));
-      
-
-        span2.appendChild(document.createTextNode(localStorage.getItem(x)));
+        span2.appendChild(document.createTextNode(y));
         li.appendChild(span2);
-      
-      
-      
+        li.appendChild(document.createTextNode("    Date :  "));
+        dateSpan.appendChild(document.createTextNode(` ${date}`));      
+        li.appendChild(dateSpan)
+        
+
+
         li.setAttribute("class", "value");
-      
+
         li.style.fontWeight = "bold";
         li.style.fontSize = "21px";
         editBtn.style.fontSize = "14px";
@@ -154,480 +120,502 @@ userNameParagrah.innerText="Welcome " + userName;
         li.appendChild(deleteBtn);
         li.appendChild(editBtn);
         list.appendChild(li);
+
+
       }
-      
+
       let inputForm = document.querySelector("#inputForm");
-      
-      let t = document.createElement("p");
-      let span = document.createElement("span");
-      span.innerText = totalExpense;
-      span.setAttribute("id", "totalSpan");
-      
-      t.setAttribute("class", "total");
+
+
+
+
+      span4.innerText = totalExpense;
+
       t.appendChild(document.createTextNode("Total Expense : "));
-      t.appendChild(span);
-      
+      t.appendChild(span4);
       inputForm.appendChild(t);
-      // let newdiv = document.createElement("div");
+
     })
-   
-  
+    .catch(err => {
+      span4.innerText = "0";
 
+      t.appendChild(document.createTextNode("Total Expense : "));
+      t.appendChild(span4);
+      inputForm.appendChild(t);
 
-submitBtn.addEventListener("click", (e) => {
-  e.preventDefault();
-
-
-
-
-  let s = document.querySelector("#totalSpan");
-  let eiValue = expenseItems.value.trim();
-  let epValue = expensePrice.value.trim();
-  let allList = document.querySelectorAll(".value");
-
-  let inputForm=document.querySelector("#inputForm");
+    })
 
 
 
-  if (!eiValue || !epValue) {
-    
 
-    if (!eiValue) {
-      if (expenseItems.parentElement.parentElement.nextElementSibling.className === "duplicateEntry") {
 
-      } else {
+
+  submitBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+
+
+
+
+    let s = document.querySelector("#totalSpan");
+
+    let eiValue = expenseItems.value.trim();
+    let epValue = expensePrice.value.trim();
+    let allList = document.querySelectorAll(".value");
+
+    let inputForm = document.querySelector("#inputForm");
+
+
+
+    if (!eiValue || !epValue) {
+
+
+      if (!eiValue) {
+        if (expenseItems.parentElement.parentElement.nextElementSibling.className === "duplicateEntry") {
+
+        } else {
           let p = document.createElement("p");
           p.setAttribute("class", "duplicateEntry")
           p.innerHTML = "*Item name required"
           inputForm.insertBefore(p, expensePrice.parentElement.parentElement)
+        }
+
       }
+      if (!epValue) {
+        if (expensePrice.parentElement.parentElement.nextElementSibling.className === "duplicateEntry") {
 
-  }
-  if (!epValue) {
-      if (expensePrice.parentElement.parentElement.nextElementSibling.className === "duplicateEntry") {
-
-      } else {
+        } else {
           let p = document.createElement("p");
           p.setAttribute("class", "duplicateEntry")
           p.innerHTML = "*Expense price required"
-          inputForm.insertBefore(p,submitBtn.parentElement.parentElement)
-      }
-    }
-  } else if (eiValue && epValue) {
-    details.expenseItem = eiValue;
-    details.expensePrice = epValue;
-    
-    if (expenseItems.parentElement.parentElement.nextElementSibling.className === "duplicateEntry") {
-      inputForm.removeChild(expenseItems.parentElement.parentElement.nextElementSibling)
-    } 
-    if (expensePrice.parentElement.parentElement.nextElementSibling.className === "duplicateEntry") {
-      inputForm.removeChild(expensePrice.parentElement.parentElement.nextElementSibling)
-    } 
-
-    
-
-    addData(details);
-    
-    if (localStorageKey.indexOf(eiValue.toUpperCase()) != -1 &&
-      localStorageKey.length) {
-
-
-
-      totalExpense += Number(epValue);
-
-      s.innerText = totalExpense;
-      let value = localStorage.getItem(eiValue.toUpperCase());
-      let newValue = Number(value) + Number(epValue)
-      localStorage.setItem(eiValue.toUpperCase(), newValue)
-
-      for (let each of allList) {
-
-        if (each.children[0].textContent == eiValue.toUpperCase()) {
-
-
-          let oldPrice = each.children[1].textContent;
-          let newPrice = Number(oldPrice) + Number(epValue);
-          each.children[1].textContent = newPrice;
-          // console.log(each.children[1].textContent)
-
-
+          inputForm.insertBefore(p, submitBtn.parentElement.parentElement)
         }
-
-
       }
+    } else if (eiValue && epValue) {
+      details.expenseItem = eiValue;
+      details.expensePrice = epValue;
 
-      eiValue = "";
-      epValue = "";
-
-
-    } else {
-
-
-      localStorageKey.push(eiValue.toUpperCase());
-      // console.log(`new added ${localStorageKey}`)
-
-      let editBtn = document.createElement("button");
-      let deleteBtn = document.createElement("button");
-
-      editBtn.appendChild(document.createTextNode("EDIT"));
-      deleteBtn.appendChild(document.createTextNode("DETELE"));
-      editBtn.setAttribute("class", "edit");
-      deleteBtn.setAttribute("class", "delete");
-      editBtn.style.float = "right";
-      deleteBtn.style.float = "right";
-
-      let li = document.createElement("li");
-      let span = document.createElement("span");
-
-      let span2 = document.createElement("span");
-
-      li.appendChild(document.createTextNode("Expense Item :  "));
-      span.appendChild(document.createTextNode(eiValue.toUpperCase()));
-      li.appendChild(span);
-      li.appendChild(document.createTextNode("        Price :  "));
-
-      span2.appendChild(document.createTextNode(epValue));
-      li.appendChild(span2);
-
-      totalExpense += Number(epValue);
-
-      s.innerText = totalExpense;
-
-
-      li.setAttribute("class", "value");
-
-      li.style.fontWeight = "bold";
-
-      li.style.fontSize = "21px";
-      editBtn.style.fontSize = "14px";
-      deleteBtn.style.fontSize = "14px";
-      editBtn.style.backgroundColor = "yellow";
-      deleteBtn.style.backgroundColor = "red";
-
-      li.appendChild(deleteBtn);
-      li.appendChild(editBtn);
-      list.appendChild(li);
-
-
-      let obj = {
-        item: eiValue.toUpperCase(),
-        price: epValue,
-
-      };
-      localStorage.setItem(obj.item, obj.price);
-      
-    }
-    expenseItems.value = "";
-      expensePrice.value = "";
-  }
-  else if(eiValue || epValue){
-    if(eiValue){
       if (expenseItems.parentElement.parentElement.nextElementSibling.className === "duplicateEntry") {
         inputForm.removeChild(expenseItems.parentElement.parentElement.nextElementSibling)
-    
-    
-      } 
-  }
-     if(epValue){
+      }
       if (expensePrice.parentElement.parentElement.nextElementSibling.className === "duplicateEntry") {
         inputForm.removeChild(expensePrice.parentElement.parentElement.nextElementSibling)
-        
+      }
+
+
  
-      } 
+      addData(details, token)
+      .then(res=>{
+
+       
+       let createdAt =new Date(res.data.data.createdAt);
+
+       let date=createdAt.toLocaleDateString();   
+
+       let editBtn = document.createElement("button");
+       let deleteBtn = document.createElement("button");
+ 
+       editBtn.appendChild(document.createTextNode("EDIT"));
+       deleteBtn.appendChild(document.createTextNode("DETELE"));
+       editBtn.setAttribute("class", "edit");
+       deleteBtn.setAttribute("class", "delete");
+       editBtn.style.float = "right";
+       deleteBtn.style.float = "right";
+ 
+       let li = document.createElement("li");
+       let span = document.createElement("span"); 
+       let span2 = document.createElement("span");
+       let dateSpan=document.createElement("span");      
+             
+ 
+       li.appendChild(document.createTextNode("Expense Item :  "));
+       span.appendChild(document.createTextNode(eiValue.toUpperCase()));
+       li.appendChild(span);
+       li.appendChild(document.createTextNode("        Price :  "));
+ 
+       span2.appendChild(document.createTextNode(epValue));
+       li.appendChild(span2);      
+      //  li.appendChild(document.createTextNode("    Date :  "));
+      //  dateSpan.appendChild(document.createTextNode(` ${date}`));      
+      //  li.appendChild(dateSpan)
+
+       totalExpense += Number(epValue);
+ 
+       s.innerText = totalExpense;
+ 
+ 
+       li.setAttribute("class", "value"); 
+       li.style.fontWeight = "bold"; 
+       li.style.fontSize = "21px";
+       editBtn.style.fontSize = "14px";
+       deleteBtn.style.fontSize = "14px";
+       editBtn.style.backgroundColor = "yellow";
+       deleteBtn.style.backgroundColor = "red";
+ 
+       li.appendChild(deleteBtn);
+       li.appendChild(editBtn);
+       list.appendChild(li);
+
+
+
+      })
+
+
+
+
+
+      // for (let each of allList) {
+
+      //   if (each.children[0].textContent == eiValue.toUpperCase()) {
+
+
+      //     let oldPrice = each.children[1].textContent;
+      //     let newPrice = Number(oldPrice) + Number(epValue);
+      //     each.children[1].textContent = newPrice;
+
+
+      //   }
+
+
+      // }
+
+      // eiValue = "";
+      // epValue = "";
+
+
+
+
+
+
+     
+
+      expenseItems.value = "";
+      expensePrice.value = "";
     }
-  expenseItems.value = "";
-  expensePrice.value = "";
-  }
+    else if (eiValue || epValue) {
+      if (eiValue) {
+        if (expenseItems.parentElement.parentElement.nextElementSibling.className === "duplicateEntry") {
+          inputForm.removeChild(expenseItems.parentElement.parentElement.nextElementSibling)
 
 
-});
+        }
+      }
+      if (epValue) {
+        if (expensePrice.parentElement.parentElement.nextElementSibling.className === "duplicateEntry") {
+          inputForm.removeChild(expensePrice.parentElement.parentElement.nextElementSibling)
 
 
-let s = document.querySelector("#search");
-s.value = "";
-
-list.addEventListener("click", (e) => {
-  e.preventDefault();
-
-  if (e.target.classList.contains("delete")) {
-
-    let ts = document.querySelector("#totalSpan");
-
-    let deletedPrice = e.target.parentElement.childNodes[3].textContent;
-
-    ts.innerText = Number(ts.textContent) - Number(deletedPrice);
-    totalExpense = Number(ts.innerText);
-    let ol = document.querySelector("#detailsList");
-
-    let li = e.target.parentElement;
-    let itemName = e.target.parentElement.children[0].textContent;
-    let userEmail=details.email;
-
-    
-    deleteData(itemName,userEmail)
-
-    let indexofItem = localStorageKey.indexOf(itemName);
-    ol.removeChild(li);
-    localStorageKey.splice(indexofItem, 1);
+        }
+      }
+      expenseItems.value = "";
+      expensePrice.value = "";
+    }
 
 
-    // localStorageKey.slice()
+  });
+
+
+  let s = document.querySelector("#search");
+  s.value = "";
+
+  list.addEventListener("click", (e) => {
+    e.preventDefault();
+
+    if (e.target.classList.contains("delete")) {
+
+      let ts = document.querySelector("#totalSpan");
+
+      let deletedPrice = e.target.parentElement.childNodes[3].textContent;
+
+      ts.innerText = Number(ts.textContent) - Number(deletedPrice);
+      totalExpense = Number(ts.innerText);
+      let ol = document.querySelector("#detailsList");
+
+      let li = e.target.parentElement;
+      let itemName = e.target.parentElement.children[0].textContent;
+      let itemPrice = e.target.parentElement.children[1].textContent;
+
+      let userEmail = details.email;
+
+
+      deleteData(itemName, userEmail, token, itemPrice)
+
+      let indexofItem = localStorageKey.indexOf(itemName);
+      ol.removeChild(li);
+      localStorageKey.splice(indexofItem, 1);
+      
 
 
 
-    localStorage.removeItem(e.target.parentElement.childNodes[1].innerText);
-   } else if (e.target.classList.contains("edit")) 
-  {
-    document.addEventListener("keydown", function (event) {
-      if (event.key === "Enter") {
-        event.preventDefault();
+
+       
+
+    } else if (e.target.classList.contains("edit")) {
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "Enter") {
+          event.preventDefault();
+        }
+
+
+
+      });
+      let newdiv = document.createElement("div");
+      let updatedData = {};
+      updatedData.email = details;
+      let updateDataTracker = false;
+
+
+      pombajomba = e.target.parentElement.childNodes[3].textContent;
+
+      let btn = document.createElement("button");
+      let btn2 = document.createElement("button");
+
+      if (submitBtn.style.display != "none") {
+        submitBtn.style.display = "none";
+
+        newdiv.setAttribute("class", "row close");
+
+        btn2.appendChild(document.createTextNode("Edit"));
+
+        btn.appendChild(document.createTextNode("Cancel"));
+        btn.setAttribute("class", "col-4");
+        btn2.setAttribute("class", "col");
+        btn.style.backgroundColor = "red";
+        btn2.style.backgroundColor = "green";
+        btn.style.color = "white";
+        btn2.style.color = "white";
+
+        newdiv.appendChild(btn2);
+        newdiv.appendChild(btn);
+        document.querySelector("#inputForm").appendChild(newdiv);
+
+        document.getElementById("expenseInput").value =
+          e.target.parentElement.childNodes[1].innerText;
+
+        document.getElementById("expensePrice").value =
+          e.target.parentElement.childNodes[3].innerText;
       }
 
-    });
-    let newdiv = document.createElement("div");
-    let updatedData={};
-    updatedData.email=details;
-    let updateDataTracker=false;
+      let x = e.target.parentElement;
+
+      let upperE = e.target.parentElement;
+
+      btn2.addEventListener("click", (e) => {
+        e.preventDefault();
+        let sameValue = false;
+        let oldKey = upperE.childNodes[1].innerText;
+        let oldPrice = upperE.childNodes[3].innerText;
 
 
-    pombajomba = e.target.parentElement.childNodes[3].textContent;
+        let flag = false;
 
-    let btn = document.createElement("button");
-    let btn2 = document.createElement("button");
 
-    if (submitBtn.style.display != "none") {
-      submitBtn.style.display = "none";
-     
-      newdiv.setAttribute("class", "row close");
 
-      btn2.appendChild(document.createTextNode("Edit"));
+        if (
+          document.getElementById("expenseInput").value !=
+          upperE.childNodes[1].innerText &&
+          document.getElementById("expenseInput").value != "" &&
+          document.getElementById("expensePrice").value ==
+          upperE.childNodes[3].innerText
+        ) {
 
-      btn.appendChild(document.createTextNode("Cancel"));
-      btn.setAttribute("class", "col-4");
-      btn2.setAttribute("class", "col");
-      btn.style.backgroundColor = "red";
-      btn2.style.backgroundColor = "green";
-      btn.style.color = "white";
-      btn2.style.color = "white";
 
-      newdiv.appendChild(btn2);
-      newdiv.appendChild(btn);
-      document.querySelector("#inputForm").appendChild(newdiv);
 
-      document.getElementById("expenseInput").value =
-        e.target.parentElement.childNodes[1].innerText;
+          if (!flag) {
 
-      document.getElementById("expensePrice").value =
-        e.target.parentElement.childNodes[3].innerText;
-    }
 
-    let x = e.target.parentElement;
 
-    let upperE = e.target.parentElement;
 
-    btn2.addEventListener("click", (e) => {
-      e.preventDefault();
-      let oldValue = localStorage.getItem(upperE.childNodes[1].innerText);
-      let sameValue = false;
-      let oldKey = upperE.childNodes[1].innerText;
-
-      let flag = false;
-
-     
-
-      if (
-        document.getElementById("expenseInput").value !=
-        upperE.childNodes[1].innerText &&
-        document.getElementById("expenseInput").value != "" &&
-        document.getElementById("expensePrice").value ==
-        upperE.childNodes[3].innerText
-      ) {
-
-        for (let i = 0; i < localStorage.length; i++) {
-          let x = localStorage.key(i);
-          if (x == document.getElementById("expenseInput").value.toUpperCase().trim()) {
-            flag = true;
-            alert("item already exists,please click that items edit")
+            upperE.childNodes[1].innerText = document
+              .getElementById("expenseInput")
+              .value.toUpperCase();
           }
-        }
+          updateDataTracker = true;
+          updatedData.todo = "onlyItemName"
+          updatedData.newExpenseItem = document.getElementById("expenseInput").value;
+          updatedData.currentPrice=oldPrice;
+          updatedData.currentExpenseItem = oldKey;
 
-        if (!flag) {
+
+        } else if (
+          document.getElementById("expensePrice").value !=
+          upperE.childNodes[3].innerText &&
+          document.getElementById("expensePrice").value != "" &&
+          document.getElementById("expenseInput").value ==
+          upperE.childNodes[1].innerText
+        ) {
+
+          if (document.getElementById("expensePrice").value == 0) {
+
+          } else {
+
+            upperE.childNodes[3].innerText =
+              document.getElementById("expensePrice").value;
+
+            updateDataTracker = true;
+            updatedData.todo = "onlyItemPrice"
+            updatedData.currentPrice=oldPrice;
+
+            updatedData.currentExpenseItem = oldKey;
+            updatedData.newExpensePrice = document.getElementById("expensePrice").value;
+
+          }
+
+        } else if (
+          document.getElementById("expensePrice").value !=
+          upperE.childNodes[3].innerText &&
+          document.getElementById("expenseInput").value !=
+          upperE.childNodes[1].innerText &&
+          document.getElementById("expensePrice").value != "" &&
+          document.getElementById("expenseInput").value != ""
+        ) {
+          flag = false;
+
+          if (!flag) {
+            upperE.childNodes[1].innerText = document
+              .getElementById("expenseInput")
+              .value.toUpperCase();
+            upperE.childNodes[3].innerText =
+              document.getElementById("expensePrice").value;
 
 
+            updateDataTracker = true;
+            updatedData.todo = "itemName&itemPrice"
+            updatedData.currentPrice=oldPrice;
 
-          localStorage.removeItem(oldKey);
+            updatedData.currentExpenseItem = oldKey;
+            updatedData.newExpenseItem = document.getElementById("expenseInput").value;
+            updatedData.newExpensePrice = document.getElementById("expensePrice").value;
 
-          upperE.childNodes[1].innerText = document
-            .getElementById("expenseInput")
-            .value.toUpperCase();
-          localStorage.setItem(upperE.childNodes[1].innerText, oldValue);
-        }
-        updateDataTracker=true;
-        updatedData.todo="onlyItemName"
-          updatedData.newExpenseItem=document.getElementById("expenseInput").value;
-                    updatedData.currentExpenseItem=oldKey;
-          
-
-      } else if (
-        document.getElementById("expensePrice").value !=
-        upperE.childNodes[3].innerText &&
-        document.getElementById("expensePrice").value != "" &&
-        document.getElementById("expenseInput").value ==
-        upperE.childNodes[1].innerText
-      ) {
-
-        if (document.getElementById("expensePrice").value == 0) {
-
+          }
+        } else if (
+          document.getElementById("expensePrice").value ==
+          upperE.childNodes[3].innerText &&
+          document.getElementById("expenseInput").value ==
+          upperE.childNodes[1].innerText
+        ) {
+          let x = confirm("Same price, do u want to change the price?");
+          if (x === true) {
+            sameValue = true;
+          }
         } else {
-          localStorage.setItem(
-            upperE.childNodes[1].innerText,
-            document.getElementById("expensePrice").value
-          );
-          upperE.childNodes[3].innerText =
-            document.getElementById("expensePrice").value;
-        
-            updateDataTracker=true;
-            updatedData.todo="onlyItemPrice"
+          alert("Empty values not allowed");
+        }
 
-        updatedData.currentExpenseItem=oldKey;
-        updatedData.newExpensePrice=document.getElementById("expensePrice").value;
-        
+        if (
+          document.getElementById("expensePrice").value != pombajomba &&
+          document.getElementById("expensePrice").value != "" &&
+          document.getElementById("expenseInput").value != ""
+        ) {
+          if (document.getElementById("expensePrice").value == 0) {
+            alert("invalid amount - 0");
+          } else if (!flag) {
+
+            let ts1 = document.querySelector("#totalSpan");
+
+            let result = 0;
+            result = Number(ts1.textContent) - Number(pombajomba);
+            totalExpense =
+              result + Number(document.getElementById("expensePrice").value);
+            ts1.innerText = totalExpense;
+
           }
 
-      } else if (
-        document.getElementById("expensePrice").value !=
-        upperE.childNodes[3].innerText &&
-        document.getElementById("expenseInput").value !=
-        upperE.childNodes[1].innerText &&
-        document.getElementById("expensePrice").value != "" &&
-        document.getElementById("expenseInput").value != ""
-      ) {
-        flag = false;
-        for (let i = 0; i < localStorage.length; i++) {
-          let x = localStorage.key(i);
-          if (x == document.getElementById("expenseInput").value.toUpperCase().trim()) {
-            flag = true;
-            alert("item already exists,please click that items edit")
-          }
         }
-        if (!flag) {
-          upperE.childNodes[1].innerText = document
-            .getElementById("expenseInput")
-            .value.toUpperCase();
-          upperE.childNodes[3].innerText =
-            document.getElementById("expensePrice").value;
-          localStorage.removeItem(oldKey);
-
-          localStorage.setItem(
-            document.getElementById("expenseInput").value.toUpperCase(),
-            document.getElementById("expensePrice").value 
-            );
-            updateDataTracker=true;
-            updatedData.todo="itemName&itemPrice"
-            
-            updatedData.currentExpenseItem=oldKey;
-             updatedData.newExpenseItem=document.getElementById("expenseInput").value;
-             updatedData.newExpensePrice= document.getElementById("expensePrice").value;
-            
+        if (!sameValue) {
+          expenseItems.value = "";
+          expensePrice.value = "";
+          inputForm.removeChild(newdiv)
+          x.style.backgroundColor = "rgba(4, 221, 241, 0.625)";
+          submitBtn.style.display = "unset";
+        } else {
+          expensePrice.value = "";
         }
-      } else if (
-        document.getElementById("expensePrice").value ==
-        upperE.childNodes[3].innerText &&
-        document.getElementById("expenseInput").value ==
-        upperE.childNodes[1].innerText
-      ) {
-        let x = confirm("Same price, do u want to change the price?");
-        if (x === true) {
-          sameValue = true;
+        if (updateDataTracker === true) {
+          updateData(updatedData, token)
+            .then(result => console.log(result))
+            .catch(err => console.log(err))
         }
-      } else {
-        alert("Empty values not allowed");
-      }
+      });
 
-      if (
-        document.getElementById("expensePrice").value != pombajomba &&
-        document.getElementById("expensePrice").value != "" &&
-        document.getElementById("expenseInput").value != ""
-      ) {
-        if (document.getElementById("expensePrice").value == 0) {
-          alert("invalid amount - 0");
-        } else if (!flag) {
-
-          let ts1 = document.querySelector("#totalSpan");
-
-          let result = 0;
-          result = Number(ts1.textContent) - Number(pombajomba);
-          totalExpense =
-            result + Number(document.getElementById("expensePrice").value);
-          ts1.innerText = totalExpense;
-
-        }
-        
-      }
-      if (!sameValue) {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
         expenseItems.value = "";
         expensePrice.value = "";
         inputForm.removeChild(newdiv)
-        x.style.backgroundColor = "rgba(4, 221, 241, 0.625)";
         submitBtn.style.display = "unset";
-      } else {
-        expensePrice.value = "";
-      }
-      // document.querySelector("#inputForm").removeChild(newdiv)
-      if( updateDataTracker===true ){
-      updateData(updatedData)
-    .then(result=>console.log(result))
-    .catch(err=> console.log(err))
-      }
-    });
-
-    btn.addEventListener("click", (e) => {
-      e.preventDefault();
-      expenseItems.value = "";
-      expensePrice.value = "";
-      inputForm.removeChild(newdiv)
-      submitBtn.style.display = "unset";
-    });
-
-    
-
-    
-  }
-});
-
-function filter(e) {
-  let del = document.querySelectorAll(".delete");
-  let ol = document.querySelectorAll(".value");
+      });
 
 
-  for (let each of ol) {
 
-    let result = each.children[0].innerText.toLowerCase();
-    let x = e.target.value[0] || ""
-    if (result[0] !== x.toLowerCase()) {
-      if (x === "") {
-        each.style.display = "unset"
-        for (let each of del) {
+
+    }
+  });
+
+  function filter(e) {
+    let del = document.querySelectorAll(".delete");
+    let ol = document.querySelectorAll(".value");
+
+
+    for (let each of ol) {
+
+      let result = each.children[0].innerText.toLowerCase();
+      let x = e.target.value[0] || ""
+      if (result[0] !== x.toLowerCase()) {
+        if (x === "") {
           each.style.display = "unset"
+          for (let each of del) {
+            each.style.display = "unset"
+          }
+        } else {
+          each.style.display = "none"
         }
-      } else {
-        each.style.display = "none"
+      }
+
+      else if (result.indexOf(e.target.value.toLowerCase()) == -1) {
+        each.style.display = "none";
+
+      }
+      else {
+        each.style.display = "block";
+
+
       }
     }
 
-    else if (result.indexOf(e.target.value.toLowerCase()) == -1) {
-      each.style.display = "none";
-
-    }
-    else {
-      each.style.display = "block";
-
-
-    }
   }
 
-}
+  search.addEventListener("keyup", filter);
 
-search.addEventListener("keyup", filter);
-  
+  let razorPayBtn = document.querySelector("#razorPay");
+  razorPayBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+
+    createOrder(token)
+      .then((res) => {
+
+        let rzp1 = new Razorpay({
+          key_id: res.data.key_id,
+          order_id: res.data.order_id,
+          handler: (responce) => {
+            paymentDetails(responce, token)
+              .then(res =>{
+                  let premiumBtn=document.querySelector("#razorPay");
+                  premiumBtn.style.display="none";
+
+              } )
+              .catch(err => console.log(err))
+          }
+
+        })
+
+        rzp1.open()
+      })
+
+      .catch((err) => {
+
+      })
+
+
+  })
+
 });

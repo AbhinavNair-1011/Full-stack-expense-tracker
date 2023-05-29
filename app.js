@@ -11,13 +11,22 @@ let validateUser=require("./routes/validateUser");
 const fetchData=require("./routes/fetchData");
 const addData=require("./routes/addData")
 const deleteData=require("./routes/deleteData");
-const updateData=require("./routes/updateData")
+const updateData=require("./routes/updateData");
+
+const membership=require("./routes/buyMembership");
+
 
 const{users}=require("./models/users")
 const{expenses}=require("./models/expenses")
+const {payments}=require("./models/payments")
 
 users.hasMany(expenses);
-expenses.belongsTo(users)
+expenses.belongsTo(users);
+
+users.hasOne(payments);
+payments.belongsTo(users);
+
+
 
 
 
@@ -33,6 +42,9 @@ app.use(fetchData)
 app.use(addData)
 app.use(deleteData)
 app.use(updateData);
+
+app.use(membership)
+
 
 
 

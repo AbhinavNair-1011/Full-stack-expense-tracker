@@ -3,9 +3,10 @@ const {Data}=require("../models/expenses");
 module.exports.deleteData=(req,res,next)=>{
    
  let name=req.params.itemName;
- let email= req.params.email;
+ let email= req.userDetails.userEmail;
+ let price=req.body.itemPrice;
 
- Data.deleteFromDatabase(name,email)
+ Data.deleteFromDatabase(name,email,price)
  .then((toBeDeleted)=>{
     if(toBeDeleted){
     toBeDeleted.destroy()

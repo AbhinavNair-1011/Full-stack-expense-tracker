@@ -219,7 +219,6 @@ window.addEventListener("DOMContentLoaded", () => {
             .then(result=>{
               
                 if(result.data.authentication===true){
-                    console.log(result.data.token)
                localStorage.setItem("token",result.data.token)
                      window.location.href="../../views/mainPage.html"
 
