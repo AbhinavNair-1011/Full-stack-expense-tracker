@@ -14,6 +14,7 @@ const deleteData=require("./routes/deleteData");
 const updateData=require("./routes/updateData");
 
 const membership=require("./routes/buyMembership");
+const fetchLeaderboard=require("./routes/fetchLeaderboard")
 
 
 const{users}=require("./models/users")
@@ -44,6 +45,7 @@ app.use(deleteData)
 app.use(updateData);
 
 app.use(membership)
+app.use(fetchLeaderboard)
 
 
 

@@ -122,6 +122,12 @@ class Data {
 
 
     }
+   static fetchLeaderboard(){
+        return expenses.findAll({
+            order: [['expensePrice', 'DESC']],
+          limit: 5,
+        })
+    }
 }
 
 module.exports = { Data, expenses };

@@ -24,6 +24,10 @@ async function paymentDetails(details, token) {
 async function isPremiumMember(d,token){
   return await axios.post("http://localhost:3000/api/buy-membership/validate-membership",d, { headers: { "authorization": token } })
 }
+async function fetchLeaderBoard(){
+  return await axios.get("http://localhost:3000/api/fetch-leaderboard")
+
+}
 
 document.addEventListener("DOMContentLoaded", (e) => {
   let expenseItems = document.querySelector("#expenseInput");
@@ -49,12 +53,45 @@ document.addEventListener("DOMContentLoaded", (e) => {
   span4.setAttribute("id", "totalSpan");
   t.setAttribute("class", "total");
 
+  let tableBody=document.querySelector("#tableBody");
+
+  fetchLeaderBoard()
+  .then(result=>{
+
+  for (let each of result.data.result){
+console.log(each.expenseItem)
+let tr=document.createElement("tr");
+let td=document.createElement("td");
+let td2=document.createElement("td");
+td.innerText=each.expenseItem;
+td2.innerText=each.expensePrice;
+
+tr.appendChild(td);
+tr.appendChild(td2);
+tableBody.appendChild(tr);
+
+
+
+
+
+  }
+  })
+  .catch(err=>console.log(err))
+
 
   isPremiumMember("d",token)
   .then(res=>{
     if(!res.data.isPremiumMember){
       let razorPay=document.querySelector("#razorPay");
+      let leaderBoardDiv=document.querySelector("#premiumMember");
       razorPay.style.display="unset";
+      leaderBoardDiv.style.visibility="hidden";
+
+    }else{
+      let leaderBoardDiv=document.querySelector("#premiumMember");
+      leaderBoardDiv.style.visibility="visible"
+
+
     }
   })
   .catch(err=>console.log(err))
@@ -69,6 +106,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
       let userNameParagrah = document.querySelector("#userName");
       userName = res.data.name;
       userNameParagrah.innerText = "Welcome " + userName;
+      userNameParagrah.style.visibility="visible";
 
       let data = res.data.data.result
       for (each of data) {
@@ -208,7 +246,6 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
        
        let createdAt =new Date(res.data.data.createdAt);
-
        let date=createdAt.toLocaleDateString();   
 
        let editBtn = document.createElement("button");
@@ -234,7 +271,9 @@ document.addEventListener("DOMContentLoaded", (e) => {
  
        span2.appendChild(document.createTextNode(epValue));
        li.appendChild(span2);      
-      //  li.appendChild(document.createTextNode("    Date :  "));
+       li.appendChild(document.createTextNode("    Date :  "));
+       dateSpan.appendChild(document.createTextNode(` ${date}`));      
+       li.appendChild(dateSpan)//  li.appendChild(document.createTextNode("    Date :  "));
       //  dateSpan.appendChild(document.createTextNode(` ${date}`));      
       //  li.appendChild(dateSpan)
 
@@ -600,7 +639,10 @@ document.addEventListener("DOMContentLoaded", (e) => {
             paymentDetails(responce, token)
               .then(res =>{
                   let premiumBtn=document.querySelector("#razorPay");
+                  let leaderBoardDiv=document.querySelector("#premiumMember");
                   premiumBtn.style.display="none";
+                  leaderBoardDiv.style.visibility="visible";
+
 
               } )
               .catch(err => console.log(err))
@@ -617,5 +659,26 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
 
   })
+
+  let leaderboardBtn=document.querySelector("#leaderBoard");
+  let leaderBoardCloseBtn=document.querySelector("#closeLeaderboard");
+ let leaderBoardDiv=document.querySelector("#leaderBoardDiv");
+
+   leaderboardBtn.addEventListener("click",(e)=>{
+   leaderBoardDiv.style.zIndex="1";
+   leaderBoardDiv.style.opacity="1";
+   });
+
+   leaderBoardCloseBtn.addEventListener("click",(e)=>{
+    leaderBoardDiv.style.zIndex="0";
+   leaderBoardDiv.style.opacity="0";
+   })
+let p =document.createElement("p");
+p.innerHTML="Top 5 Highest Expenses of all users"
+p.style.color="white";
+p.style.fontSize="20px"
+
+leaderBoardDiv.insertBefore(p,leaderBoardCloseBtn.nextElementSibling)
+
 
 });

@@ -23,13 +23,30 @@
             <h1 id="heading">EXPENSE TRACKER</h1>
         </div>
         <div class="profile">
-        <p id="userName">Welcome abhinav</p>
+        <p id="userName" style="visibility:hidden">Welcome abhinav</p>
         <button id="razorPay" style="display:none">Buy Premium Membership</button>
         <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     </div>
     </header>
     <main>
-        
+        <div class="premiumMember" id="premiumMember" style="visibility:hidden">
+            <p id="premiumMemberP">You are a premium member</p>
+            <button id="leaderBoard">Leaderboard</button>
+        </div>
+        <div id="leaderBoardDiv">
+            <button id="closeLeaderboard" style="float:right">X</button>
+            <table id="table">
+                <thead id="tableHead">
+                    <tr id="headingRow">
+                        <td id="name">NAME</td>
+                        <td id="amount">AMOUNT</td>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                  
+                </tbody>
+            </table>
+        </div>
         <section id="inputSectionTag">
             <div id="inputSectionDiv" class="container-sm">
                 <form action="" id="inputForm">

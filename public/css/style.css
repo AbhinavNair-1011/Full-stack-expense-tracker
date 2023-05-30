@@ -3,7 +3,7 @@ body{
     background-size:cover;
     background-repeat:no-repeat;
     background-color: black;
-    
+    position:relative;
     
 }
 #headingDiv {
@@ -40,18 +40,82 @@ body{
 margin-left:10px;
 color:bisque
 }
+#razorPay{
+    height:30px;
+    background-color: lightslategray;
+       
+    
+}
+
+#premiumMember{
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    margin-top:-17px;
+}
+#premiumMemberP{
+   color: lightslategray;
+}
+#leaderBoard{
+    width:100px;
+    height:30px;
+    background-color:lightslategray;
+    color:black;
+    margin-right:10px;
+}
+#leaderBoardDiv{
+    position:Absolute;
+    background-color:whitesmoke;
+    top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  min-width:55vw;
+  height:300px;
+  z-index:0;
+  opacity:0;
+  background-color:rgba(6, 240, 228, 0.5);
+  backdrop-filter: blur(5px);
+}
+table{
+    width:100%;
+    height:100%;
+}
+#headingRow{
+    background-color: black;
+    color:antiquewhite;
+    margin-bottom:-5px;
+}
+#closeLeaderboard{
+    width:30px;
+    height:30px;
+    background-color: red;;
+    color:white;
+}
+
+table{
+    
+    color:black;
+    font-family:Georgia, 'Times New Roman', Times, serif;
+}
+tr{   
+    display: flex;
+    justify-content: space-around;
+    margin:7px;
+    padding:4px;
+    border: 1px dotted black;
+        font-weight: bolder;
+
+
+    
+}
 #inputSectionDiv{
  background-color: rgba(6, 240, 228, 0.5);
-
- 
-    
     margin-bottom:15px;
    
 }
 #inputForm{
     padding:5px;
-    font-family: bold;
-    
+    font-family: bold;   
  
    
      
