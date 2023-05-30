@@ -70,11 +70,12 @@ color:bisque
   left: 50%;
   transform: translate(-50%, -50%);
   min-width:55vw;
-  height:300px;
+  height:320px;
   z-index:0;
   opacity:0;
   background-color:rgba(6, 240, 228, 0.5);
   backdrop-filter: blur(5px);
+  overflow-y: scroll;
 }
 table{
     width:100%;
@@ -261,6 +262,18 @@ font-weight: bold;
     .duplicateEntry{
         min-width:100px
     }
+    #leaderBoard{
+        width:82px;
+        height:29px;
+        font-size: 12px;
+    }
+    #headingLeaderboard{
+        font-size: 25px !important;
+        padding-left:20px !important;
+    }
+    #leaderBoardDiv{
+        width:80%;
+    }
     
     
 
@@ -273,6 +286,18 @@ font-weight: bold;
         padding:0;
         margin-bottom: 30px;
         margin-top:20px;
+    }
+    #leaderBoard{
+        width:78px;
+        height:25px;
+        font-size: 12px;
+    }
+    #premiumMemberP{
+        font-size:13px;
+    }
+    #headingLeaderboard{
+        font-size: 25px !important;
+        padding-left:0 !important;
     }
    
 }

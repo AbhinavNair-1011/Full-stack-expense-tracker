@@ -1,6 +1,6 @@
 const sequelize = require("../database/connection")
 const Sequelize = require("sequelize");
-const { users, Users } = require("../models/users")
+const { users, Users } = require("../models/users");
 
 
 
@@ -123,10 +123,16 @@ class Data {
 
     }
    static fetchLeaderboard(){
-        return expenses.findAll({
-            order: [['expensePrice', 'DESC']],
-          limit: 5,
-        })
+       return users.findAll({
+        attributes:["id","name",[sequelize.fn("sum",sequelize.col("expenses.expensePrice")),"totalAmount"]],
+        include:[{
+            model:expenses,
+            attributes:[]            
+        }],
+        group:["users.id"],
+        order:[["totalAmount","DESC"]]
+
+       })
     }
 }
 

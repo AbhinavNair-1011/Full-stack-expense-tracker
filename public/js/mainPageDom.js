@@ -57,14 +57,18 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
   fetchLeaderBoard()
   .then(result=>{
-
+console.log(result)
   for (let each of result.data.result){
-console.log(each.expenseItem)
+
 let tr=document.createElement("tr");
 let td=document.createElement("td");
 let td2=document.createElement("td");
-td.innerText=each.expenseItem;
-td2.innerText=each.expensePrice;
+td.style.minWidth="70px"
+td2.style.minWidth="70px"
+
+td2.style.textAlign="center"
+td.innerText=each.name
+td2.innerText=each.totalAmount
 
 tr.appendChild(td);
 tr.appendChild(td2);
@@ -667,16 +671,23 @@ tableBody.appendChild(tr);
    leaderboardBtn.addEventListener("click",(e)=>{
    leaderBoardDiv.style.zIndex="1";
    leaderBoardDiv.style.opacity="1";
+
+   
    });
 
    leaderBoardCloseBtn.addEventListener("click",(e)=>{
     leaderBoardDiv.style.zIndex="0";
    leaderBoardDiv.style.opacity="0";
    })
+   
 let p =document.createElement("p");
-p.innerHTML="Top 5 Highest Expenses of all users"
+p.innerHTML="LEADERBOARD"
 p.style.color="white";
-p.style.fontSize="20px"
+p.style.fontSize="30px"
+p.style.textAlign="center"
+p.style.fontWeight="bold"
+p.style.paddingLeft="36px"
+p.setAttribute("id","headingLeaderboard")
 
 leaderBoardDiv.insertBefore(p,leaderBoardCloseBtn.nextElementSibling)
 
