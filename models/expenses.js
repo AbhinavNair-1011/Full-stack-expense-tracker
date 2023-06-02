@@ -1,139 +1,152 @@
-const sequelize = require("../database/connection")
+const sequelize = require("../database/connection");
 const Sequelize = require("sequelize");
 const { users, Users } = require("../models/users");
 
-
-
 const expenses = sequelize.define("expenses", {
-    id: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true
-    },
-    expenseItem: {
-        type: Sequelize.STRING,
-        allowNull: false,
-       
-    },
-    expensePrice: {
-        type: Sequelize.BIGINT,
-        allowNull: false
-    }
-})
-
+  id: {
+    type: Sequelize.INTEGER,
+    allowNull: false,
+    autoIncrement: true,
+    primaryKey: true,
+  },
+  expenseItem: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
+  expensePrice: {
+    type: Sequelize.BIGINT,
+    allowNull: false,
+  },
+});
 
 class Data {
-    constructor(expenseItem, expensePrice, email) {
-        this.item = expenseItem;
-        this.price = expensePrice;
-        this.email = email
+  constructor(expenseItem, expensePrice, email) {
+    this.item = expenseItem;
+    this.price = expensePrice;
+    this.email = email;
+  }
+
+  static async fetchAll(email) {
+    try {
+      let user = await users.findOne({
+        where: {
+          email: email,
+        },
+      });
+      let expense = await expenses.findAll({
+        where: {
+          userId: user.dataValues.id,
+        },
+      });
+
+      return expense;
+    } catch (err) {
+      res.json({
+        status: "failed",
+        error: err,
+      });
     }
-    static fetchAll(email) {
-
-        return users.findOne({
-            where: {
-                email: email
-            }
-        })
-            .then(result => {
-                  
-                return expenses.findAll({
-                    where: {
-                        userId: result.dataValues.id
-                    }
-                })
-            })
-
+  }
+  async insertIntoDatabase() {
+    try {
+      let user = await users.findOne({
+        where: {
+          email: this.email,
+        },
+      });
+      let userId = user.dataValues.id;
+      return expenses.create({
+        expenseItem: this.item.toUpperCase(),
+        expensePrice: this.price,
+        userId: userId,
+      });
+    } catch (err) {
+      return err;
     }
-    insertIntoDatabase() {
+  }
 
-        return users.findOne({
-            where: {
-                email: this.email
-            }
-        })
-            .then(result => {
-                let userId = result.dataValues.id
-                return expenses.create({
-                    expenseItem: this.item.toUpperCase(),
-                    expensePrice: this.price,
-                    userId: userId
-                })
-            })
+  static async updateData(data, userDetails) {
+    try {
+      let user = await users.findOne({
+        where: {
+          email: userDetails.userEmail,
+        },
+      });
 
+      let id = user.dataValues.id;
+
+      let expense = await expenses.findOne({
+        where: {
+          userId: id,
+          expenseItem: data.currentExpenseItem,
+          expensePrice: data.currentPrice,
+        },
+      });
+      if (data.todo === "onlyItemName") {
+        return await expense.update({
+          expenseItem: data.newExpenseItem.toUpperCase(),
+        });
+      } else if (data.todo === "onlyItemPrice") {
+        return await expense.update({
+          expensePrice: data.newExpensePrice,
+        });
+      } else if (data.todo === "itemName&itemPrice") {
+        return await expense.update({
+          expenseItem: data.newExpenseItem.toUpperCase(),
+          expensePrice: data.newExpensePrice,
+        });
+      }
+    } catch (err) {
+      return err;
     }
+  }
 
-    static updateData(data, userDetails) {
+  static async deleteFromDatabase(name, email, price) {
+    try {
+      let user = await users.findOne({
+        where: {
+          email: email,
+        },
+      });
 
-        return users.findOne({
-            where: {
-                email: userDetails.userEmail
-            }
-        })
-            .then(result => {
-                let id = result.dataValues.id;
-                return expenses.findOne({
-                    where: {
-                        userId: id,
-                        expenseItem: data.currentExpenseItem,
-                        expensePrice:data.currentPrice
+      let id = user.dataValues.id;
 
-                    }
-                })
-            })
-            .then(result => {
-                if (data.todo === "onlyItemName") {
-                    return result.update({
-                        expenseItem: data.newExpenseItem.toUpperCase()
-                    })
-                } else if (data.todo === "onlyItemPrice") {
-                    return result.update({
-                        expensePrice: data.newExpensePrice
-                    })
-                } else if (data.todo === "itemName&itemPrice") {
-                    return result.update({
-                        expenseItem: data.newExpenseItem.toUpperCase(),
-                        expensePrice: data.newExpensePrice
-
-                    })
-                }
-
-            })
+      return await expenses.findOne({
+        where: {
+          userId: id,
+          expenseItem: name,
+          expensePrice: price,
+        },
+      });
+    } catch (err) {
+      return err;
     }
+  }
 
-    static deleteFromDatabase(name, email,price) {
-        return users.findOne({
-            where: {
-                email: email
-            }
-        })
-
-            .then(result => {
-                let id = result.dataValues.id
-                return expenses.findOne({
-                    where: {
-                        userId: id,
-                        expenseItem: name,
-                        expensePrice:price
-                    }
-                })
-            })
-
-
+  static async fetchLeaderboard() {
+    try {
+      return await users.findAll({
+        attributes: [
+          "id",
+          "name",
+          [
+            sequelize.fn("sum", sequelize.col("expenses.expensePrice")),
+            "totalAmount",
+          ],
+        ],
+        include: [
+          {
+            model: expenses,
+            attributes: [],
+          },
+        ],
+        group: ["users.id"],
+        order: [["totalAmount", "DESC"]],
+      });
+    } catch (err) {
+      return err;
     }
-   static fetchLeaderboard(){
-       return users.findAll({
-        attributes:["id","name",[sequelize.fn("sum",sequelize.col("expenses.expensePrice")),"totalAmount"]],
-        include:[{
-            model:expenses,
-            attributes:[]            
-        }],
-        group:["users.id"],
-        order:[["totalAmount","DESC"]]
-
-       })
-    }
+  }
 }
 
 module.exports = { Data, expenses };

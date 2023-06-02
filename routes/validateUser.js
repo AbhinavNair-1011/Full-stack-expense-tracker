@@ -1,6 +1,6 @@
-const controller=require("../controllers/validateUserController");
-const router=require("express").Router();
+const controller = require("../controllers/validateUserController");
+const router = require("express").Router();
 
-router.post("/api/validate-user",controller.validateUser);
+router.post("/api/validate-user", controller.validateUser);
 
-module.exports=router;
+module.exports = router;

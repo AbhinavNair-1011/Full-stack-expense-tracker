@@ -1,8 +1,6 @@
-const controller=require("../controllers/addUserController");
-const router=require("express").Router();
+const controller = require("../controllers/addUserController");
+const router = require("express").Router();
 
+router.post("/api/add-user", controller.addUser);
 
-router.post("/api/add-user",controller.addUser)
-
-module.exports=router;
-
+module.exports = router;

@@ -15,6 +15,11 @@
         crossorigin="anonymous"></script>
 
     <link rel="stylesheet" href="/public/css/style.css">
+    <script>
+         if(!localStorage.getItem("token")){
+    window.location.href="../../views/index.html"
+    }
+    </script>
 </head>
 
 <body>
@@ -23,8 +28,10 @@
             <h1 id="heading">EXPENSE TRACKER</h1>
         </div>
         <div class="profile">
-        <p id="userName" style="visibility:hidden">Welcome abhinav</p>
+        <p id="userName" style="visibility:hidden">Welcome abhinav </p>
+       
         <button id="razorPay" style="display:none">Buy Premium Membership</button>
+        <button id="logout">Logout</button>
         <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     </div>
     </header>

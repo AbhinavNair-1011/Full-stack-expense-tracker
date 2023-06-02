@@ -1,25 +1,27 @@
-let express=require("express");
-let app=express();
-let cors=require("cors");
+let express = require("express");
+let app = express();
+let cors = require("cors");
 
-let sequelize=require("./database/connection");
-let Sequelize=require("sequelize");
+let sequelize = require("./database/connection");
+let Sequelize = require("sequelize");
 
-let addUser=require("./routes/addUser");
-let validateUser=require("./routes/validateUser");
+let addUser = require("./routes/addUser");
+let validateUser = require("./routes/validateUser");
 
-const fetchData=require("./routes/fetchData");
-const addData=require("./routes/addData")
-const deleteData=require("./routes/deleteData");
-const updateData=require("./routes/updateData");
+const fetchData = require("./routes/fetchData");
+const addData = require("./routes/addData");
+const deleteData = require("./routes/deleteData");
+const updateData = require("./routes/updateData");
 
-const membership=require("./routes/buyMembership");
-const fetchLeaderboard=require("./routes/fetchLeaderboard")
+const membership = require("./routes/buyMembership");
+const fetchLeaderboard = require("./routes/fetchLeaderboard");
+const forgotPassword=require("./routes/forgotPassword");
+const verifyOtp=require("./routes/verifyOtp");
+const updateUserPassword=require("./routes/updatePassword")
 
-
-const{users}=require("./models/users")
-const{expenses}=require("./models/expenses")
-const {payments}=require("./models/payments")
+const { users } = require("./models/users");
+const { expenses } = require("./models/expenses");
+const { payments } = require("./models/payments");
 
 users.hasMany(expenses);
 expenses.belongsTo(users);
@@ -27,36 +29,32 @@ expenses.belongsTo(users);
 users.hasOne(payments);
 payments.belongsTo(users);
 
-
-
-
-
 app.use(express.json());
-app.use(express.urlencoded({extended:false}));
+app.use(express.urlencoded({ extended: false }));
 app.use(cors());
-app.use(express.static(__dirname+"/public"));
+app.use(express.static(__dirname + "/public"));
 
 app.use(addUser);
 app.use(validateUser);
+app.use(forgotPassword);
+app.use(verifyOtp)
+app.use(updateUserPassword)
 
-app.use(fetchData)
-app.use(addData)
-app.use(deleteData)
+app.use(fetchData);
+app.use(addData);
+app.use(deleteData);
 app.use(updateData);
 
-app.use(membership)
-app.use(fetchLeaderboard)
+app.use(membership);
+app.use(fetchLeaderboard);
 
-
-
-
-sequelize.sync()
-.then(result=>{
-    app.listen(3000,()=>{
-        console.log("connected")
-    })
-})
-.catch(err=>{
-    console.log(err)
-})
-
+sequelize
+  .sync()
+  .then((result) => {
+    app.listen(3000, () => {
+      console.log("connected");
+    });
+  })
+  .catch((err) => {
+    console.log(err);
+  });

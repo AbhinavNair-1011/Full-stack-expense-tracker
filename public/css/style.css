@@ -1,303 +1,287 @@
-body{
-    /* background-image: url(a.png); */
-    background-size:cover;
-    background-repeat:no-repeat;
-    background-color: black;
-    position:relative;
-    
+body {
+  /* background-image: url(a.png); */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-color: black;
+  position: relative;
 }
 #headingDiv {
-   
-    text-align: center;
-   
-   
+  text-align: center;
+}
+#heading {
+  color: rgb(15, 252, 240);
+  text-align: center;
+  font-size: 3.3em;
+  margin: 10px;
+  padding: 10px;
+  text-shadow: 1px 4px 10px;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  letter-spacing: 16px;
+  font-weight: bold;
+}
+.profile {
+  display: flex;
+  justify-content:space-around;
+  font-weight: bold;
+}
+#logout{
+  height:21px;
+  width:60px;
+  font-size: 12px;
+  margin-left:10px;
+  margin-top:3px;
+  background-color:white;
+  font-weight: bolder;
+  font-family: monospace;
 
 }
-#heading{
-    color:rgb(15, 252, 240);
-    text-align: center;
-    font-size: 3.3em;
-    margin: 10px;
-    padding: 10px;
-    text-shadow: 1px 4px 10px;
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    letter-spacing: 16px;
-    font-weight: bold
-    ;
+#userName {
+  /* background-color: rgb(9, 100, 100); */
+  color: bisque;
 }
-.profile{
-    display: flex;
-    justify-content: space-between;
-    font-weight: bold;
+#editProfile {
+  /* background-color: rgb(9, 100, 100); */
+  margin-left: 10px;
+  color: bisque;
 }
-#userName{
-    /* background-color: rgb(9, 100, 100); */
-    color:bisque
-
-}
-#editProfile{
-/* background-color: rgb(9, 100, 100); */
-margin-left:10px;
-color:bisque
-}
-#razorPay{
-    height:30px;
-    background-color: lightslategray;
-       
-    
+#razorPay {
+  height: 30px;
+  background-color: lightslategray;
 }
 
-#premiumMember{
-    display: flex;
-    justify-content: space-between;
-    align-items: start;
-    margin-top:-17px;
+#premiumMember {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  /* margin-top: -17px; */
 }
-#premiumMemberP{
-   color: lightslategray;
+#premiumMemberP {
+  color: lightslategray;
 }
-#leaderBoard{
-    width:100px;
-    height:30px;
-    background-color:lightslategray;
-    color:black;
-    margin-right:10px;
+#leaderBoard {
+  width: 100px;
+  height: 30px;
+  background-color: lightslategray;
+  color: black;
+  margin-right: 10px;
 }
-#leaderBoardDiv{
-    position:Absolute;
-    background-color:whitesmoke;
-    top: 50%;
+#leaderBoardDiv {
+  position: Absolute;
+  background-color: whitesmoke;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  min-width:55vw;
-  height:320px;
-  z-index:0;
-  opacity:0;
-  background-color:rgba(6, 240, 228, 0.5);
+  min-width: 55vw;
+  height: 320px;
+  z-index: 0;
+  opacity: 0;
+  background-color: rgba(6, 240, 228, 0.5);
   backdrop-filter: blur(5px);
-  overflow-y: scroll;
+  overflow-y:auto;
 }
-table{
-    width:100%;
-    height:100%;
+table {
+  width: 100%;
+  height: 100%;
 }
-#headingRow{
-    background-color: black;
-    color:antiquewhite;
-    margin-bottom:-5px;
+#headingRow {
+  background-color: black;
+  color: antiquewhite;
+  margin-bottom: -5px;
 }
-#closeLeaderboard{
-    width:30px;
-    height:30px;
-    background-color: red;;
-    color:white;
-}
-
-table{
-    
-    color:black;
-    font-family:Georgia, 'Times New Roman', Times, serif;
-}
-tr{   
-    display: flex;
-    justify-content: space-around;
-    margin:7px;
-    padding:4px;
-    border: 1px dotted black;
-        font-weight: bolder;
-
-
-    
-}
-#inputSectionDiv{
- background-color: rgba(6, 240, 228, 0.5);
-    margin-bottom:15px;
-   
-}
-#inputForm{
-    padding:5px;
-    font-family: bold;   
- 
-   
-     
-}
-#inputSectionDiv:hover{
-    box-shadow: 0 0 7px  rgb(15, 252, 240);
-}
-.edit,.delete{
-    color:rgb(3, 0, 0);
-}
-.total{
-    
-/* white-Space:"pre"; */
-
-font-size: 25px;;
- color:rgb(138, 0, 23);
-font-Weight:"bold";
-margin:0;
-text-align: center;
-list-style-type: none;
-font-family: "Hanalei Fill";
-
-}
-.form-label{
-    display: flex;
-    align-items: center;
-}
-#expenseLabel{
-   background-color: rgba(6, 240, 228, 0.11); 
-   color:white;
-   font-family: "Hanalei Fill";
-   justify-content: center;
-}
-#expenseLabel2{
-    background-color: rgba(6, 240, 228, 0.123); 
-    color: white;
-    font-family: "Hanalei Fill";
-    justify-content: center;
- }
-.row{
-   margin-top:30px;
-   font-size: 20px;
-   justify-content: center;
-
-}
-.form-control:hover{
-    box-shadow: 0 0 5px  rgb(15, 252, 240);
-}
-#submitBtn:hover{
-    box-shadow: 0 0 3px  rgb(15, 252, 240);
-}
-#expensePrice , #expenseInput{
-    background-color:rgba(0, 255, 255, 0.465);
-    height:28px;
-    width:350px;
-    font-family: 'Courier New', Courier, monospace;
-    color:rgb(0, 0, 0);
-    font-size: 18px;
-    font-weight: bold;
-   
-}
-#submitDiv{
-   justify-content: center;
-   font-family: "Hanalei Fill";
-}
-#submitBtn{
-width:90px;
-background-color: rgba(6, 240, 228, 0.692) !important;
-color:white
-
-}
-#inputForm{
-    position:relative;
-}
-.deleteBtn{
-    width:100px;
-    height:30px;
-    position:absolute;
-    bottom:10px;
-    right:0;
-    font-size: 15px;
+#closeLeaderboard {
+  width: 30px;
+  height: 30px;
+  background-color: red;
+  color: white;
 }
 
-.value{
-background-color: rgba(6, 240, 228, 0.329);
-margin-top:3px;
-color:white;
-list-style-type: none;
-font-family:'Courier New';
-font-size: 16px !important;
-/* height: 100px !important; */
+table {
+  color: black;
+  font-family: Georgia, "Times New Roman", Times, serif;
+}
+tr {
+  display: flex;
+  justify-content: space-around;
+  margin: 7px;
+  padding: 4px;
+  border: 1px dotted black;
+  font-weight: bolder;
+}
+#inputSectionDiv {
+  background-color: rgba(6, 240, 228, 0.5);
+  margin-bottom: 15px;
+}
+#inputForm {
+  padding: 5px;
+  font-family: bold;
+}
+#inputSectionDiv:hover {
+  box-shadow: 0 0 7px rgb(15, 252, 240);
+}
+.edit,
+.delete {
+  color: rgb(3, 0, 0);
+}
+.total {
+  /* white-Space:"pre"; */
 
+  font-size: 25px;
+  color: rgb(138, 0, 23);
+  font-weight: "bold";
+  margin: 0;
+  text-align: center;
+  list-style-type: none;
+  font-family: "Hanalei Fill";
+}
+.form-label {
+  display: flex;
+  align-items: center;
+}
+#expenseLabel {
+  background-color: rgba(6, 240, 228, 0.11);
+  color: white;
+  font-family: "Hanalei Fill";
+  justify-content: center;
+}
+#expenseLabel2 {
+  background-color: rgba(6, 240, 228, 0.123);
+  color: white;
+  font-family: "Hanalei Fill";
+  justify-content: center;
+}
+.row {
+  margin-top: 30px;
+  font-size: 20px;
+  justify-content: center;
+}
+.form-control:hover {
+  box-shadow: 0 0 5px rgb(15, 252, 240);
+}
+#submitBtn:hover {
+  box-shadow: 0 0 3px rgb(15, 252, 240);
+}
+#expensePrice,
+#expenseInput {
+  background-color: rgba(0, 255, 255, 0.465);
+  height: 28px;
+  width: 350px;
+  font-family: "Courier New", Courier, monospace;
+  color: rgb(0, 0, 0);
+  font-size: 18px;
+  font-weight: bold;
+}
+#submitDiv {
+  justify-content: center;
+  font-family: "Hanalei Fill";
+}
+#submitBtn {
+  width: 90px;
+  background-color: rgba(6, 240, 228, 0.692) !important;
+  color: white;
+}
+#inputForm {
+  position: relative;
+}
+.deleteBtn {
+  width: 100px;
+  height: 30px;
+  position: absolute;
+  bottom: 10px;
+  right: 0;
+  font-size: 15px;
+}
 
+.value {
+  background-color: rgba(6, 240, 228, 0.329);
+  margin-top: 3px;
+  color: white;
+  list-style-type: none;
+  font-family: "Courier New";
+  font-size: 16px !important;
+  /* height: 100px !important; */
 }
-.value:hover{
-    box-shadow: 0 0 5px  rgb(217, 255, 1);
+.value:hover {
+  box-shadow: 0 0 5px rgb(217, 255, 1);
 }
-span{
-    color:aqua
-    
+span {
+  color: aqua;
 }
-.col-2{
-     justify-self: start;
+.col-2 {
+  justify-self: start;
 }
 
-#detailsList{
-    padding:0;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
+#detailsList {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
 }
-#search{
-    background-color:rgba(0, 255, 255, 0.465) ;
-    margin-bottom:15px;
-    color:white;
-    text-align: center;
-font-weight: bold;
+#search {
+  background-color: rgba(0, 255, 255, 0.465);
+  margin-bottom: 15px;
+  color: white;
+  text-align: center;
+  font-weight: bold;
 }
 .duplicateEntry {
-    color: #fffb06;
-    font-size: 14px;
-   min-width:400px;
-   text-align:center;
-   font-weight: lighter;
-    
-    margin-top: -11px;
-    margin-bottom: -10px;
- 
+  color: #fffb06;
+  font-size: 14px;
+  min-width: 400px;
+  text-align: center;
+  font-weight: lighter;
+
+  margin-top: -11px;
+  margin-bottom: -10px;
 }
-@media(min-width:780px){
-    .value{
- font-size: 19px !important;
-            }
+@media (min-width: 780px) {
+  .value {
+    font-size: 19px !important;
+  }
 }
-@media(max-width:517px){
-    .form-label{
-        max-width:424px;
-        font-size: 13.5px;
-    }
-    input{
-        min-width:100px;
-    }
-    .duplicateEntry{
-        min-width:100px
-    }
-    #leaderBoard{
-        width:82px;
-        height:29px;
-        font-size: 12px;
-    }
-    #headingLeaderboard{
-        font-size: 25px !important;
-        padding-left:20px !important;
-    }
-    #leaderBoardDiv{
-        width:80%;
-    }
-    
-    
+@media (max-width: 517px) {
+  .form-label {
+    max-width: 424px;
+    font-size: 13.5px;
+  }
+  input {
+    min-width: 100px;
+  }
+  .duplicateEntry {
+    min-width: 100px;
+  }
+  #leaderBoard {
+    width: 82px;
+    height: 29px;
+    font-size: 12px;
+  }
+  #headingLeaderboard {
+    font-size: 25px !important;
+    padding-left: 20px !important;
+  }
+  #leaderBoardDiv {
+    width: 80%;
+  }
 
 }
-@media(max-width:350px){
-    #heading{
-        font-size: 2.5em !important;
-        letter-spacing:10px ;
-        margin:0;
-        padding:0;
-        margin-bottom: 30px;
-        margin-top:20px;
-    }
-    #leaderBoard{
-        width:78px;
-        height:25px;
-        font-size: 12px;
-    }
-    #premiumMemberP{
-        font-size:13px;
-    }
-    #headingLeaderboard{
-        font-size: 25px !important;
-        padding-left:0 !important;
-    }
-   
+@media (max-width: 350px) {
+  #heading {
+    font-size: 2.5em !important;
+    letter-spacing: 10px;
+    margin: 0;
+    padding: 0;
+    margin-bottom: 30px;
+    margin-top: 20px;
+  }
+  #leaderBoard {
+    width: 78px;
+    height: 25px;
+    font-size: 12px;
+  }
+  #premiumMemberP {
+    font-size: 13px;
+  }
+  #headingLeaderboard {
+    font-size: 25px !important;
+    padding-left: 0 !important;
+  }
 }

@@ -1,15 +1,13 @@
-const {expenses,Data}=require("../models/expenses")
+const { expenses, Data } = require("../models/expenses");
 
-module.exports.fetchLeaderboard=(req,res,next)=>{
-Data.fetchLeaderboard()
-.then(result=>{
-
-return res.status(200).json({result})
-})
-.catch(err=>{
+module.exports.fetchLeaderboard = async (req, res, next) => {
+  try {
+    let result = await Data.fetchLeaderboard();
+    return res.status(200).json({ result });
+  } catch (err) {
     return res.status(404).json({
-        status:"failed",
-        err:err
-    })
-})
-}
+      status: "failed",
+      err: err,
+    });
+  }
+};

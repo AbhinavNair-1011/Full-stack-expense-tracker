@@ -1,20 +1,14 @@
-const jwt=require("jsonwebtoken");
+const jwt = require("jsonwebtoken");
 
-module.exports= function jwtVerify(req,res,next){
-    const userDetails=jwt.verify(req.headers.authorization,"secret121fs");
-   
-    if(userDetails){
-   
+module.exports = function jwtVerify(req, res, next) {
+  const userDetails = jwt.verify(req.headers.authorization, "secret121fs");
 
-req.userDetails=userDetails;
-next();
-    }
-    else{
-    
-
-        return res.json({
-            status:"failed"
-        })
-    }
-}
-   
+  if (userDetails) {
+    req.userDetails = userDetails;
+    next();
+  } else {
+    return res.json({
+      status: "failed",
+    });
+  }
+};

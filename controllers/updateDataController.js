@@ -1,19 +1,17 @@
-const {expenses,Data}=require("../models/expenses")
+const { expenses, Data } = require("../models/expenses");
 
-module.exports.updateData=(req,res,next)=>{
-   
-    Data.updateData(req.body,req.userDetails)
-    .then(result=>{
-        res.json({
-            status:"success",
-            data:[result.expenseItem,result.expensePrice,result.updatedAt]
-        })
-    })
-    .catch(err=>{
-        res.json({
-            status:"failed",
-            errorMsg:err
-        })
-    
-    })
-}
+module.exports.updateData = async (req, res, next) => {
+  try {
+    let result = await Data.updateData(req.body, req.userDetails);
+
+    return res.json({
+      status: "success",
+      data: [result.expenseItem, result.expensePrice, result.updatedAt],
+    });
+  } catch (err) {
+    return res.json({
+      status: "failed",
+      errorMsg: err,
+    });
+  }
+};
