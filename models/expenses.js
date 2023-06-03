@@ -1,12 +1,12 @@
 const sequelize = require("../database/connection");
 const Sequelize = require("sequelize");
 const { users, Users } = require("../models/users");
+const{DataTypes}=require("sequelize")
 
 const expenses = sequelize.define("expenses", {
   id: {
-    type: Sequelize.INTEGER,
-    allowNull: false,
-    autoIncrement: true,
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,   
     primaryKey: true,
   },
   expenseItem: {

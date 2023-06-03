@@ -34,19 +34,35 @@ window.addEventListener("DOMContentLoaded", () => {
   let loginPassword = document.querySelector("#loginPassword");
 
   let forgotPasswordForm = document.querySelector("#forgotPasswordForm");
+  let forgotPasswordSubmit = document.querySelector("#forgot");
 
   let name = document.querySelector("#name");
   let email = document.querySelector("#email");
   let phoneNumber = document.querySelector("#phoneNumber");
+  let password = document.querySelector("#password");
+
+  let forgotPasswordEmail = document.querySelector("#forgotPasswordEmail");
+  let forgotPasswordOtp = document.querySelector("#forgotPasswordOtp");
+  let forgotPasswordNew = document.querySelector("#forgotPasswordNew");
+  let forgotPasswordNewConfirm = document.querySelector(
+    "#forgotPasswordNewConfirm"
+  );
+
+  let cancelButton = document.createElement("button");
+
 
   email.value = "";
-  password.value = `********************************`;
+  password.value = "";
   password.addEventListener("click", (e) => {
     password.value = "";
   });
   name.value = "";
-
   phoneNumber.value = "";
+  forgotPasswordEmail.value = "";
+  forgotPasswordOtp.value = "";
+  forgotPasswordNew.value = "";
+  forgotPasswordNewConfirm.value = "";
+  let turur=false;
 
   if (!localStorage.getItem("token")) {
     loginForm.style.zIndex = 1;
@@ -63,6 +79,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
   registerShift.addEventListener("click", (e) => {
     e.preventDefault();
+    clearLoginWarning();
     registerShift.style.textDecoration = "underline";
     loginShift.style.textDecoration = "none";
     registerShift.style.textDecorationColor = "black";
@@ -73,10 +90,19 @@ window.addEventListener("DOMContentLoaded", () => {
 
     loginForm.style.zIndex = 0;
     registerForm.style.transition = "opacity 0.2s ease-in";
+    loginEmail.value = "";
+    loginPassword.value = "";
+    forgotPasswordEmail.value = "";
+    forgotPasswordOtp.value = "";
+    forgotPasswordNew.value = "";
+    forgotPasswordNewConfirm.value = "";
+    forgotPasswordEmail.removeAttribute("disabled");
+
   });
   loginShift.addEventListener("click", (e) => {
     e.preventDefault();
-
+    clearRegisterWarning(name, email, phoneNumber, password);
+ 
     registerShift.style.textDecoration = "none";
     loginShift.style.textDecoration = "underline";
     loginShift.style.textDecorationColor = "black";
@@ -87,8 +113,20 @@ window.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => {
       loginForm.style.zIndex = 1;
     }, 220);
-    loginEmail.value = "";
-    loginPassword.value = "";
+
+    name.value = "";
+    email.value = "";
+    password.value = "";
+    phoneNumber.value = "";
+    forgotPasswordEmail.value = "";
+    forgotPasswordOtp.value = "";
+    forgotPasswordNew.value = "";
+    forgotPasswordNewConfirm.value = "";
+    forgotPasswordEmail.removeAttribute("disabled");
+    
+    
+    
+    
   });
 
   let userDetails = {
@@ -100,6 +138,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
   registerBtn.addEventListener("click", (e) => {
     e.preventDefault();
+
     if (name.value && email.value && phoneNumber.value && password.value) {
       userDetails.name = name.value;
       userDetails.email = email.value;
@@ -306,7 +345,6 @@ window.addEventListener("DOMContentLoaded", () => {
           "loginDuplicateEntry"
         ) {
           loginForm.removeChild(loginPassword.parentElement.nextElementSibling);
-          console.log("jijij");
         }
         let p = document.createElement("p");
         p.setAttribute("class", "loginDuplicateEntry");
@@ -341,6 +379,13 @@ window.addEventListener("DOMContentLoaded", () => {
   let forgotPasswordBtn = document.querySelector("#forgotPassword");
 
   forgotPasswordBtn.addEventListener("click", (e) => {
+    clearRegisterWarning(name, email, phoneNumber, password);
+    clearLoginWarning();
+
+    forgotPasswordSubmit.value = "Send otp in Email";
+
+    loginEmail.value = "";
+    loginPassword.value = "";
     let forgotPasswordOtpWrap = document.querySelector(
       "#forgotPasswordOtpWrap"
     );
@@ -362,282 +407,346 @@ window.addEventListener("DOMContentLoaded", () => {
     forgotPasswordForm.style.zIndex = 2;
     registerForm.style.opacity = 0;
     loginForm.style.opacity = 0;
+  });
 
-    let forgotPasswordSubmit = document.querySelector("#forgot");
+  forgotPasswordSubmit.addEventListener("click", (e) => {
+    e.preventDefault();
 
-    forgotPasswordSubmit.addEventListener("click", (e) => {
-      e.preventDefault();
+    if (forgotPasswordSubmit.value === "Send otp in Email") {
+      if (forgotPasswordEmail.value) {
+        let email = { email: forgotPasswordEmail.value };
 
-      let forgotPasswordEmail = document.querySelector("#forgotPasswordEmail");
-      let forgotPasswordOtp = document.querySelector("#forgotPasswordOtp");
-      let forgotPasswordNew = document.querySelector("#forgotPasswordNew");
-      let forgotPasswordNewConfirm = document.querySelector(
-        "#forgotPasswordNewConfirm"
-      );
-
-      if (forgotPasswordSubmit.value === "Send otp in Email") {
-        if (forgotPasswordEmail.value) {
-          let email = { email: forgotPasswordEmail.value };
-
-          if (
-            forgotPasswordEmail.parentElement.nextElementSibling.className ===
-            "loginDuplicateEntry"
-          ) {
-            forgotPasswordForm.removeChild(
-              forgotPasswordEmail.parentElement.nextElementSibling
-            );
-          }
-
-          forgotPassword(email)
-            .then((result) => {
-              if (result.data.errorMsg === "no user found") {
-                forgotPasswordOtpWrap.style.display = "none";
-
-                if (
-                  forgotPasswordEmail.parentElement.nextElementSibling
-                    .className === "loginDuplicateEntry"
-                ) {
-                } else {
-                  let p = document.createElement("p");
-                  p.setAttribute("class", "loginDuplicateEntry");
-                  p.innerHTML = "*User not found";
-                  forgotPasswordForm.insertBefore(
-                    p,
-                    forgotPasswordEmail.parentElement.nextElementSibling
-                  );
-                }
-              } else {
-                forgotPasswordEmail.setAttribute("disabled", "");
-                forgotPasswordOtpWrap.style.display = "flex";
-                forgotPasswordSubmit.value = "Submit otp";
-                // registerShift.style.visibility="hidden";
-                // loginShift.style.visibility="hidden"
-              }
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-        } else {
-          if (
-            forgotPasswordEmail.parentElement.nextElementSibling.className ===
-            "loginDuplicateEntry"
-          ) {
-          } else {
-            let p = document.createElement("p");
-            p.setAttribute("class", "loginDuplicateEntry");
-            p.innerHTML = "*Email required";
-            forgotPasswordForm.insertBefore(
-              p,
-              forgotPasswordEmail.parentElement.nextElementSibling
-            );
-          }
+        if (
+          forgotPasswordEmail.parentElement.nextElementSibling.className ===
+          "loginDuplicateEntry"
+        ) {
+          forgotPasswordForm.removeChild(
+            forgotPasswordEmail.parentElement.nextElementSibling
+          );
         }
-      } else if (forgotPasswordSubmit.value === "Submit otp") {
-        if (forgotPasswordOtp.value) {
-          if (
-            forgotPasswordOtp.parentElement.nextElementSibling.className ===
-            "loginDuplicateEntry"
-          ) {
-            forgotPasswordForm.removeChild(
-              forgotPasswordOtp.parentElement.nextElementSibling
-            );
-          }
-          let details = {
-            email: forgotPasswordEmail.value,
-            otp: forgotPasswordOtp.value,
-          };
 
-          verifyOtp(details)
-            .then((result) => {
-              if (result.data.status === "successfull") {
-                if (
-                  forgotPasswordOtp.parentElement.nextElementSibling
-                    .className === "loginDuplicateEntry"
-                ) {
-                  forgotPasswordForm.removeChild(
-                    forgotPasswordOtp.parentElement.nextElementSibling
-                  );
-                }
-                forgotPasswordOtpWrap.style.display = "none";
-                forgotPasswordNewWrap.style.display = "flex";
-                forgotPasswordNewConfirmWrap.style.display = "flex";
-                forgotPasswordNewConfirm.value = "";
+        forgotPassword(email)
+          .then((result) => {
+            if (result.data.errorMsg === "no user found") {
+              forgotPasswordOtpWrap.style.display = "none";
 
-                forgotPasswordNew.value = "";
-                forgotPasswordOtp.value = "";
-
-                forgotPasswordSubmit.value = "Reset Password";
-              } else if (result.data.status === "failed") {
-                if (
-                  forgotPasswordOtp.parentElement.nextElementSibling
-                    .className === "loginDuplicateEntry"
-                ) {
-                  forgotPasswordForm.removeChild(
-                    forgotPasswordOtp.parentElement.nextElementSibling
-                  );
-                }
+              if (
+                forgotPasswordEmail.parentElement.nextElementSibling
+                  .className === "loginDuplicateEntry"
+              ) {
+              } else {
                 let p = document.createElement("p");
                 p.setAttribute("class", "loginDuplicateEntry");
-                p.innerHTML = "*Invalid otp";
+                p.innerHTML = "*User not found";
                 forgotPasswordForm.insertBefore(
                   p,
+                  forgotPasswordEmail.parentElement.nextElementSibling
+                );
+               
+              }
+            } else {
+              let forgotPasswordWrap= document.querySelector("#forgotPasswordWrap")
+              
+              cancelButton.innerText="Resend otp"
+              cancelButton.setAttribute("id", "cancelOtp");         
+
+               forgotPasswordWrap.appendChild(cancelButton);
+
+              forgotPasswordEmail.setAttribute("disabled", "");
+              forgotPasswordOtpWrap.style.display = "flex";
+              forgotPasswordSubmit.value = "Submit otp";
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } else {
+        if (
+          forgotPasswordEmail.parentElement.nextElementSibling.className ===
+          "loginDuplicateEntry"
+        ) {
+        } else {
+          let p = document.createElement("p");
+          p.setAttribute("class", "loginDuplicateEntry");
+          p.innerHTML = "*Email required";
+          forgotPasswordForm.insertBefore(
+            p,
+            forgotPasswordEmail.parentElement.nextElementSibling
+          );
+        }
+      }
+    } else if (forgotPasswordSubmit.value === "Submit otp") {
+      if (forgotPasswordOtp.value) {
+        if (
+          forgotPasswordOtp.parentElement.nextElementSibling.className ===
+          "loginDuplicateEntry"
+        ) {
+          forgotPasswordForm.removeChild(
+            forgotPasswordOtp.parentElement.nextElementSibling
+          );
+        }
+        let details = {
+          email: forgotPasswordEmail.value,
+          otp: forgotPasswordOtp.value,
+        };
+
+        verifyOtp(details)
+          .then((result) => {
+            if (result.data.status === "successfull") {
+              if (
+                forgotPasswordOtp.parentElement.nextElementSibling.className ===
+                "loginDuplicateEntry"
+              ) {
+                forgotPasswordForm.removeChild(
                   forgotPasswordOtp.parentElement.nextElementSibling
                 );
-                forgotPasswordOtp.value = "";
               }
+              forgotPasswordOtpWrap.style.display = "none";
+              forgotPasswordNewWrap.style.display = "flex";
+              forgotPasswordNewConfirmWrap.style.display = "flex";
+              forgotPasswordNewConfirm.value = "";
+
+              forgotPasswordOtp.value = "";
+              forgotPasswordNew.value = "";
+              forgotPasswordNewConfirm.value = "";
+            } else if (result.data.status === "failed") {
+              if (
+                forgotPasswordOtp.parentElement.nextElementSibling.className ===
+                "loginDuplicateEntry"
+              ) {
+                forgotPasswordForm.removeChild(
+                  forgotPasswordOtp.parentElement.nextElementSibling
+                );
+              }
+              let p = document.createElement("p");
+              p.setAttribute("class", "loginDuplicateEntry");
+              p.innerHTML = "*Invalid otp";
+              forgotPasswordForm.insertBefore(
+                p,
+                forgotPasswordOtp.parentElement.nextElementSibling
+              );
+              forgotPasswordOtp.value = "";
+            }
+          })
+          .catch((err) => {});
+      } else {
+        if (
+          forgotPasswordOtp.parentElement.nextElementSibling.className ===
+          "loginDuplicateEntry"
+        ) {
+          forgotPasswordForm.removeChild(
+            forgotPasswordOtp.parentElement.nextElementSibling
+          );
+        }
+        let p = document.createElement("p");
+        p.setAttribute("class", "loginDuplicateEntry");
+        p.innerHTML = "*Otp required";
+        forgotPasswordForm.insertBefore(
+          p,
+          forgotPasswordOtp.parentElement.nextElementSibling
+        );
+
+        forgotPasswordOtp.value = "";
+      }
+    } else if (forgotPasswordSubmit.value === "Reset Password") {
+      if (forgotPasswordNew.value && forgotPasswordNewConfirm.value) {
+        if (forgotPasswordNew.value === forgotPasswordNewConfirm.value) {
+          let email = forgotPasswordEmail.value;
+          let password = forgotPasswordNew.value;
+
+          if (
+            forgotPasswordNew.parentElement.nextElementSibling.className ===
+            "loginDuplicateEntry"
+          ) {
+            forgotPasswordForm.removeChild(
+              forgotPasswordNew.parentElement.nextElementSibling
+            );
+          }
+          if (
+            forgotPasswordNewConfirm.parentElement.nextElementSibling
+              .className === "loginDuplicateEntry"
+          ) {
+            forgotPasswordForm.removeChild(
+              forgotPasswordNewConfirm.parentElement.nextElementSibling
+            );
+          }
+
+          let details = { email, password };
+          updateUserPassword(details)
+            .then((result) => {
+              forgotPasswordNewConfirm.value = "";
+              forgotPasswordNew.value = "";
+              forgotPasswordNewConfirm.value = "";
+              forgotPasswordOtp.value = "";
+              forgotPasswordEmail.value = "";
+              forgotPasswordEmail.removeAttribute("disabled");
+
+              loginForm.style.opacity = "1";
+              loginForm.style.zIndex = "1";
+              forgotPasswordForm.style.opacity = "0";
+              forgotPasswordForm.style.zIndex = "0";
             })
             .catch((err) => {});
         } else {
           if (
-            forgotPasswordOtp.parentElement.nextElementSibling.className ===
+            forgotPasswordNew.parentElement.nextElementSibling.className ===
             "loginDuplicateEntry"
           ) {
             forgotPasswordForm.removeChild(
-              forgotPasswordOtp.parentElement.nextElementSibling
+              forgotPasswordNew.parentElement.nextElementSibling
+            );
+          }
+          if (
+            forgotPasswordNewConfirm.parentElement.nextElementSibling
+              .className === "loginDuplicateEntry"
+          ) {
+            forgotPasswordForm.removeChild(
+              forgotPasswordNewConfirm.parentElement.nextElementSibling
             );
           }
           let p = document.createElement("p");
           p.setAttribute("class", "loginDuplicateEntry");
-          p.innerHTML = "*Otp required";
+          p.innerHTML = "*Password does not match";
           forgotPasswordForm.insertBefore(
             p,
-            forgotPasswordOtp.parentElement.nextElementSibling
+            forgotPasswordNew.parentElement.nextElementSibling
+          );
+          forgotPasswordForm.insertBefore(
+            p,
+            forgotPasswordNewConfirm.parentElement.nextElementSibling
+          );
+          forgotPasswordNewConfirm.value = "";
+          forgotPasswordNew.value = "";
+        }
+      } else if (!forgotPasswordNew.value || !forgotPasswordNewConfirm.value) {
+        if (forgotPasswordNewConfirm.value) {
+          if (
+            forgotPasswordNewConfirm.parentElement.nextElementSibling
+              .className === "loginDuplicateEntry"
+          ) {
+            forgotPasswordForm.removeChild(
+              forgotPasswordNewConfirm.parentElement.nextElementSibling
+            );
+          }
+        }
+        if (forgotPasswordNew.value) {
+          if (
+            forgotPasswordNew.parentElement.nextElementSibling.className ===
+            "loginDuplicateEntry"
+          ) {
+            forgotPasswordForm.removeChild(
+              forgotPasswordNew.parentElement.nextElementSibling
+            );
+          }
+        }
+        if (!forgotPasswordNew.value) {
+          if (
+            forgotPasswordNew.parentElement.nextElementSibling.className ===
+            "loginDuplicateEntry"
+          ) {
+            forgotPasswordForm.removeChild(
+              forgotPasswordNew.parentElement.nextElementSibling
+            );
+          }
+          let p = document.createElement("p");
+          p.setAttribute("class", "loginDuplicateEntry");
+          p.innerHTML = "*Password required";
+          forgotPasswordForm.insertBefore(
+            p,
+            forgotPasswordNew.parentElement.nextElementSibling
           );
         }
-      } else if (forgotPasswordSubmit.value === "Reset Password") {
-        if (forgotPasswordNew.value && forgotPasswordNewConfirm.value) {
-          if (forgotPasswordNew.value === forgotPasswordNewConfirm.value) {
-            let email = forgotPasswordEmail.value;
-            let password = forgotPasswordNew.value;
-
-            if (
-              forgotPasswordNew.parentElement.nextElementSibling.className ===
-              "loginDuplicateEntry"
-            ) {
-              forgotPasswordForm.removeChild(
-                forgotPasswordNew.parentElement.nextElementSibling
-              );
-            }
-            if (
-              forgotPasswordNewConfirm.parentElement.nextElementSibling
-                .className === "loginDuplicateEntry"
-            ) {
-              forgotPasswordForm.removeChild(
-                forgotPasswordNewConfirm.parentElement.nextElementSibling
-              );
-            }
-
-            let details = { email, password };
-            updateUserPassword(details)
-              .then((result) => {
-                console.log(result);
-                forgotPasswordNewConfirm.value = "";
-                forgotPasswordNew.value = "";
-                forgotPasswordNewConfirm.value = "";
-                forgotPasswordNew.value = "";
-                forgotPasswordOtp.value = "";
-                forgotPasswordEmail.value = "";
-                forgotPasswordEmail.removeAttribute("disabled ");
-
-                loginForm.style.opacity="1"
-                loginForm.style.zIndex="1"
-                forgotPasswordForm.style.opacity="0"
-                forgotPasswordForm.style.zIndex="0"
-
-
-              })
-              .catch((err) => {});
-          } else {
-            if (
-              forgotPasswordNew.parentElement.nextElementSibling.className ===
-              "loginDuplicateEntry"
-            ) {
-              forgotPasswordForm.removeChild(
-                forgotPasswordNew.parentElement.nextElementSibling
-              );
-            }
-            if (
-              forgotPasswordNewConfirm.parentElement.nextElementSibling
-                .className === "loginDuplicateEntry"
-            ) {
-              forgotPasswordForm.removeChild(
-                forgotPasswordNewConfirm.parentElement.nextElementSibling
-              );
-            }
-            let p = document.createElement("p");
-            p.setAttribute("class", "loginDuplicateEntry");
-            p.innerHTML = "*Password does not match";
-            forgotPasswordForm.insertBefore(
-              p,
-              forgotPasswordNew.parentElement.nextElementSibling
-            );
-            forgotPasswordForm.insertBefore(
-              p,
-              forgotPasswordNewConfirm.parentElement.nextElementSibling
-            );
-            forgotPasswordNewConfirm.value = "";
-            forgotPasswordNew.value = "";
-          }
-        } else if (
-          !forgotPasswordNew.value ||
-          !forgotPasswordNewConfirm.value
-        ) {
-          if (forgotPasswordNewConfirm.value) {
-            if (
-              forgotPasswordNewConfirm.parentElement.nextElementSibling
-                .className === "loginDuplicateEntry"
-            ) {
-              forgotPasswordForm.removeChild(
-                forgotPasswordNewConfirm.parentElement.nextElementSibling
-              );
-            }
-          }
-          if (forgotPasswordNew.value) {
-            if (
-              forgotPasswordNew.parentElement.nextElementSibling.className ===
-              "loginDuplicateEntry"
-            ) {
-              forgotPasswordForm.removeChild(
-                forgotPasswordNew.parentElement.nextElementSibling
-              );
-            }
-          }
-          if (!forgotPasswordNew.value) {
-            if (
-              forgotPasswordNew.parentElement.nextElementSibling.className ===
-              "loginDuplicateEntry"
-            ) {
-              forgotPasswordForm.removeChild(
-                forgotPasswordNew.parentElement.nextElementSibling
-              );
-            }
-            let p = document.createElement("p");
-            p.setAttribute("class", "loginDuplicateEntry");
-            p.innerHTML = "*Password required";
-            forgotPasswordForm.insertBefore(
-              p,
-              forgotPasswordNew.parentElement.nextElementSibling
-            );
-          }
-          if (!forgotPasswordNewConfirm.value) {
-            if (
-              forgotPasswordNewConfirm.parentElement.nextElementSibling
-                .className === "loginDuplicateEntry"
-            ) {
-              forgotPasswordForm.removeChild(
-                forgotPasswordNewConfirm.parentElement.nextElementSibling
-              );
-            }
-            let p = document.createElement("p");
-            p.setAttribute("class", "loginDuplicateEntry");
-            p.innerHTML = "*Password required";
-            forgotPasswordForm.insertBefore(
-              p,
+        if (!forgotPasswordNewConfirm.value) {
+          if (
+            forgotPasswordNewConfirm.parentElement.nextElementSibling
+              .className === "loginDuplicateEntry"
+          ) {
+            forgotPasswordForm.removeChild(
               forgotPasswordNewConfirm.parentElement.nextElementSibling
             );
           }
+          let p = document.createElement("p");
+          p.setAttribute("class", "loginDuplicateEntry");
+          p.innerHTML = "*Password required";
+          forgotPasswordForm.insertBefore(
+            p,
+            forgotPasswordNewConfirm.parentElement.nextElementSibling
+          );
         }
       }
-    });
+    }
   });
+  let resendOtpCount = 0;
+
+  
+  cancelButton.addEventListener("click", (e) => {
+    resendOtpCount++;
+    e.preventDefault();
+    if (resendOtpCount === 1) {
+      if (
+        forgotPasswordOtp.parentElement.nextElementSibling.className ===
+        "loginDuplicateEntry"
+       ) {
+        forgotPasswordForm.removeChild(
+          forgotPasswordOtp.parentElement.nextElementSibling
+        );
+      }
+      let p = document.createElement("p");
+      p.setAttribute("class", "loginDuplicateEntry");
+      p.innerHTML = "*Otp resent";
+      forgotPasswordForm.insertBefore(
+        p,
+        forgotPasswordOtp.parentElement.nextElementSibling
+      );
+    }else if (resendOtpCount === 2) {
+      if (
+        forgotPasswordOtp.parentElement.nextElementSibling.className ===
+        "loginDuplicateEntry"
+       ) {
+        forgotPasswordForm.removeChild(
+          forgotPasswordOtp.parentElement.nextElementSibling
+        );
+      }
+      let p = document.createElement("p");
+      p.setAttribute("class", "loginDuplicateEntry");
+      p.innerHTML = "Resent,Please wait and check your mail";
+      forgotPasswordForm.insertBefore(
+        p,
+        forgotPasswordOtp.parentElement.nextElementSibling
+      );
+    }
+    
+
+    if (resendOtpCount === 3) {
+
+      let btn = document.querySelector("#cancelOtp");
+       btn.parentElement.removeChild(btn)
+       
+      if (
+        forgotPasswordOtp.parentElement.nextElementSibling.className ===
+        "loginDuplicateEntry"
+       ) {
+        forgotPasswordForm.removeChild(
+          forgotPasswordOtp.parentElement.nextElementSibling
+        );
+      }
+      let p = document.createElement("p");
+      p.setAttribute("class", "loginDuplicateEntry");
+      p.innerHTML = "*Please try again later";
+      forgotPasswordForm.insertBefore(
+        p,
+        forgotPasswordOtp.parentElement.nextElementSibling
+      );
+      // e.target.parentElement.removeChild(e.target)
+
+      
+    }
+
+    forgotPassword({ email: forgotPasswordEmail.value })
+      .then((res) => {})
+      .then((err) => {});
+  });
+    
+
+
 });

@@ -1,12 +1,15 @@
 const sequelize = require("../database/connection");
 const Sequelize = require("sequelize");
 const { users, Users } = require("../models/users");
+const {DataTypes}=require("sequelize")
+
 
 const payments = sequelize.define("payments", {
   id: {
-    type: Sequelize.INTEGER,
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
     primaryKey: true,
-    autoIncrement: true,
+  
   },
   orderId: Sequelize.STRING,
   paymentId: Sequelize.STRING,

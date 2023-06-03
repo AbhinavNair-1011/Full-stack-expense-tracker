@@ -1,13 +1,14 @@
 const sequelize = require("../database/connection");
 const Sequelize = require("sequelize");
+const {DataTypes}=require("sequelize")
 const dotenv = require("dotenv").config();
 const Sib = require("sib-api-v3-sdk");
 const { otp, Otp } = require("./otp");
 
 const users = sequelize.define("users", {
   id: {
-    type: Sequelize.INTEGER,
-    autoIncrement: true,
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
     primaryKey: true,
   },
   name: {
@@ -77,7 +78,7 @@ class Users {
 
   static async forgotPassword(userEmail) {
     try {
-      let user = await users.findOne({
+      let user = await users.findAll({
         where: {
           email: userEmail,
         },

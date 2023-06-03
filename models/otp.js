@@ -1,11 +1,13 @@
 const sequelize=require("../database/connection");
 const Sequelize=require("sequelize");
 const {users,Users}=require("./users")
+const{DataTypes}=require("sequelize")
+
 
 const otp=sequelize.define("otp",{
     id:{
-        type:Sequelize.INTEGER,
-        autoIncrement:true,
+        type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
         primaryKey:true
     },
     otp:{
@@ -24,18 +26,22 @@ class Otp{
         this.otp=otp 
     }
     async insertIntoDatabase(){
-        let user=await otp.findOne({where:{
+        let user=await otp.findAll({where:{
             userEmail:this.email
         }})
-    
+       
         if(user){
-            user.destroy();
+      
+            otp.destroy({where:{
+                userEmail:this.email
+            }});
             return await otp.create({
                 userEmail:this.email,
                  otp:this.otp
      
              });
         }else{
+            
             return await otp.create({
                 userEmail:this.email,
                  otp:this.otp

@@ -68,7 +68,7 @@ body {
 #leaderBoardDiv {
   position: Absolute;
   background-color: whitesmoke;
-  top: 50%;
+  top: 59%;
   left: 50%;
   transform: translate(-50%, -50%);
   min-width: 55vw;

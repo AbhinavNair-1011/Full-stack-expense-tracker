@@ -126,6 +126,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
       userName = res.data.name;
       userNameParagrah.innerText = "Welcome " + userName;
       userNameParagrah.style.visibility = "visible";
+      userName.style.zIndex="4"
 
       let data = res.data.data.result;
       for (each of data) {
@@ -275,9 +276,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
         li.appendChild(span2);
         li.appendChild(document.createTextNode("    Date :  "));
         dateSpan.appendChild(document.createTextNode(` ${date}`));
-        li.appendChild(dateSpan); //  li.appendChild(document.createTextNode("    Date :  "));
-        //  dateSpan.appendChild(document.createTextNode(` ${date}`));
-        //  li.appendChild(dateSpan)
+        li.appendChild(dateSpan); 
 
         totalExpense += Number(epValue);
 
@@ -296,21 +295,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
         list.appendChild(li);
       });
 
-      // for (let each of allList) {
-
-      //   if (each.children[0].textContent == eiValue.toUpperCase()) {
-
-      //     let oldPrice = each.children[1].textContent;
-      //     let newPrice = Number(oldPrice) + Number(epValue);
-      //     each.children[1].textContent = newPrice;
-
-      //   }
-
-      // }
-
-      // eiValue = "";
-      // epValue = "";
-
+      
       expenseItems.value = "";
       expensePrice.value = "";
     } else if (eiValue || epValue) {

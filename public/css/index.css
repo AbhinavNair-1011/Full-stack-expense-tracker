@@ -66,6 +66,15 @@ input[type="submit"] {
   text-decoration: underline;
   font-weight: bold;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  
+}
+#cancelOtp{
+  width: 260px;
+height: 25px;
+border-radius: 30px 0;
+padding-left: 10px;
+background-color: rgba(0, 255, 255, 0.465);
+font-size: 14px;
 }
 #forgotPasswordForm{
   background-color: rgba(4, 221, 241, 0.625);
@@ -138,6 +147,11 @@ input[type="submit"] {
 #register:hover {
   box-shadow: 0 0 3px rgb(15, 252, 240);
 }
+#forgotPasswordOtp{
+  padding-right:15px
+}
+
+
 
 #loginSubmitWrap,
 #registerSubmitWrap {
@@ -236,7 +250,12 @@ input {
   .registerLoginButton {
     width: 35%;
   }
-
+#forgot{
+  font-size: 13px;
+}
+#cancelOtp{
+  font-size: 13px;
+}
   #loginForm {
     width: 90%;
   }
@@ -257,6 +276,9 @@ input {
     padding-left: 190px;
     margin-top: -11px;
     margin-bottom: -10px;
+  }
+  #forgotPasswordForm{
+    width: 90%;
   }
 }
 

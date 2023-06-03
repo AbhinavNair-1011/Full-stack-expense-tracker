@@ -9,7 +9,7 @@ module.exports.forgotPassword = async (req, res, next) => {
             errorMsg:"no user found"
         })
     }else{
-        return res.json({ result });
+        return res.json({ status:"successfull" });
 
     }
    
