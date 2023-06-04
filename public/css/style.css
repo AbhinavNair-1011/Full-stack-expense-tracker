@@ -25,13 +25,14 @@ body {
   font-weight: bold;
 }
 #logout{
-  height:21px;
-  width:60px;
-  font-size: 12px;
+  /* width: 100px; */
+  height:25px;
+  background-color: red;
+  color:white;
+  font-size: 14px;
   margin-left:10px;
   margin-top:3px;
-  background-color:white;
-  font-weight: bolder;
+    font-weight: bolder;
   font-family: monospace;
 
 }
@@ -49,32 +50,45 @@ body {
   background-color: lightslategray;
 }
 
+
 #premiumMember {
   display: flex;
   justify-content: space-between;
-  align-items: start;
-  /* margin-top: -17px; */
+  align-items: end;
+ margin-bottom:10px;
 }
 #premiumMemberP {
-  color: lightslategray;
+  color: bisque;
 }
 #leaderBoard {
-  width: 100px;
-  height: 30px;
-  background-color: lightslategray;
+  background-color: bisque;
   color: black;
   margin-right: 10px;
+  font-size: 14px;
+  font-weight: bold;
+}
+#buttonWrap{
+  display: flex;
+  width: max-content;
+ 
+}
+#expenseReport{
+  background-color: bisque;
+  color: black;
+  margin-right: 10px;
+  font-size: 14px;
+  font-weight: bold;
 }
 #leaderBoardDiv {
   position: Absolute;
   background-color: whitesmoke;
-  top: 59%;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   min-width: 55vw;
   height: 320px;
-  z-index: 0;
-  opacity: 0;
+ display:none;
+ z-index: 1;
   background-color: rgba(6, 240, 228, 0.5);
   backdrop-filter: blur(5px);
   overflow-y:auto;
@@ -98,13 +112,15 @@ table {
 table {
   color: black;
   font-family: Georgia, "Times New Roman", Times, serif;
+  border-collapse: collapse;
+
 }
 tr {
   display: flex;
   justify-content: space-around;
   margin: 7px;
   padding: 4px;
-  border: 1px dotted black;
+  border: 1px solid black;
   font-weight: bolder;
 }
 #inputSectionDiv {
@@ -198,7 +214,6 @@ tr {
   list-style-type: none;
   font-family: "Courier New";
   font-size: 16px !important;
-  /* height: 100px !important; */
 }
 .value:hover {
   box-shadow: 0 0 5px rgb(217, 255, 1);
@@ -250,17 +265,27 @@ span {
     min-width: 100px;
   }
   #leaderBoard {
-    width: 82px;
+    width: 100%;
     height: 29px;
-    font-size: 12px;
+    font-size: 14px;
   }
+  
   #headingLeaderboard {
     font-size: 25px !important;
     padding-left: 20px !important;
   }
   #leaderBoardDiv {
-    width: 80%;
+    width: 90%;
+    margin-top:-30px;
   }
+  #expenseReport{
+    width:100%;
+  }
+  #buttonWrap{
+   flex-direction: column-reverse;
+  }
+  
+
 
 }
 @media (max-width: 350px) {
@@ -272,11 +297,7 @@ span {
     margin-bottom: 30px;
     margin-top: 20px;
   }
-  #leaderBoard {
-    width: 78px;
-    height: 25px;
-    font-size: 12px;
-  }
+ 
   #premiumMemberP {
     font-size: 13px;
   }

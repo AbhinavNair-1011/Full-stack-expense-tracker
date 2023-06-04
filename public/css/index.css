@@ -234,10 +234,15 @@ input {
   font-weight: lighter;
 }
 
+
 @media (max-width: 540px) {
   #mainDiv {
     margin-top: 50px;
   }
+  #expenseReport{
+    height:10px;
+  }
+  
 
   h1 {
     font-size: 3em;

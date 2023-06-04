@@ -53,6 +53,8 @@ if(!localStorage.getItem("token")){
   window.location.href="../../views/index.html"
   }
 document.addEventListener("DOMContentLoaded", (e) => {
+  
+  
  
   let expenseItems = document.querySelector("#expenseInput");
   let expensePrice = document.querySelector("#expensePrice");
@@ -96,6 +98,8 @@ document.addEventListener("DOMContentLoaded", (e) => {
         tr.appendChild(td);
         tr.appendChild(td2);
         tableBody.appendChild(tr);
+  
+    
       }
     })
     .catch((err) => console.log(err));
@@ -112,6 +116,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
         let profile=document.querySelector(".profile");
         profile.style.justifyContent="center"
         leaderBoardDiv.style.visibility = "visible";
+        
 
       }
     })
@@ -120,16 +125,20 @@ document.addEventListener("DOMContentLoaded", (e) => {
   fetchData(token)
     .then((res) => {
       details.email = res.data.email;
+      
+     
+      
 
-      let userName;
-      let userNameParagrah = document.querySelector("#userName");
-      userName = res.data.name;
-      userNameParagrah.innerText = "Welcome " + userName;
-      userNameParagrah.style.visibility = "visible";
-      userName.style.zIndex="4"
+  
+      
 
       let data = res.data.data.result;
-      for (each of data) {
+
+   data.sort((a,b)=> new Date(b.createdAt)-new Date(a.createdAt))
+   
+      for (let each of data) {
+
+        
         let x = each.expenseItem.toUpperCase();
         let y = each.expensePrice;
 
@@ -152,6 +161,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
         let span2 = document.createElement("span");
         let dateSpan = document.createElement("span");
 
+        
         li.appendChild(document.createTextNode("Expense Item :  "));
         span.appendChild(document.createTextNode(x));
         li.appendChild(span);
@@ -161,6 +171,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
         li.appendChild(document.createTextNode("    Date :  "));
         dateSpan.appendChild(document.createTextNode(` ${date}`));
         li.appendChild(dateSpan);
+        
 
         li.setAttribute("class", "value");
 
@@ -177,11 +188,24 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
       let inputForm = document.querySelector("#inputForm");
 
-      span4.innerText = totalExpense;
+      
+        
+        span4.innerText = totalExpense;
 
       t.appendChild(document.createTextNode("Total Expense : "));
       t.appendChild(span4);
       inputForm.appendChild(t);
+
+      let logout=document.querySelector("#logout");
+      logout.style.display="initial"
+      
+      let userNameParagrah = document.querySelector("#userName");
+      let userName = res.data.name;
+      userNameParagrah.innerText = "Welcome " + userName;
+      
+      userNameParagrah.style.visibility = "visible";
+    
+      
     })
     .catch((err) => {
       span4.innerText = "0";
@@ -190,6 +214,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
       inputForm.appendChild(t);
     });
 
+   
   submitBtn.addEventListener("click", (e) => {
     e.preventDefault();
 
@@ -266,17 +291,18 @@ document.addEventListener("DOMContentLoaded", (e) => {
         let span = document.createElement("span");
         let span2 = document.createElement("span");
         let dateSpan = document.createElement("span");
-
+        
+        
         li.appendChild(document.createTextNode("Expense Item :  "));
         span.appendChild(document.createTextNode(eiValue.toUpperCase()));
         li.appendChild(span);
         li.appendChild(document.createTextNode("        Price :  "));
-
         span2.appendChild(document.createTextNode(epValue));
         li.appendChild(span2);
         li.appendChild(document.createTextNode("    Date :  "));
         dateSpan.appendChild(document.createTextNode(` ${date}`));
         li.appendChild(dateSpan); 
+       
 
         totalExpense += Number(epValue);
 
@@ -292,7 +318,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
         li.appendChild(deleteBtn);
         li.appendChild(editBtn);
-        list.appendChild(li);
+        list.insertBefore(li,list.firstChild)
       });
 
       
@@ -586,13 +612,13 @@ document.addEventListener("DOMContentLoaded", (e) => {
   let leaderBoardDiv = document.querySelector("#leaderBoardDiv");
 
   leaderboardBtn.addEventListener("click", (e) => {
-    leaderBoardDiv.style.zIndex = "1";
-    leaderBoardDiv.style.opacity = "1";
+    leaderBoardDiv.style.display="initial";
+    search.style.zIndex="0";
   });
 
   leaderBoardCloseBtn.addEventListener("click", (e) => {
-    leaderBoardDiv.style.zIndex = "0";
-    leaderBoardDiv.style.opacity = "0";
+    search.style.zIndex="6";
+    leaderBoardDiv.style.display="none"
   });
 
   let p = document.createElement("p");
@@ -613,4 +639,10 @@ document.addEventListener("DOMContentLoaded", (e) => {
     window.location.href="../../views/index.html";
 
   })
+  let expenseReport=document.querySelector("#expenseReport");
+expenseReport.addEventListener("click",(e)=>{
+  window.location.href="../../views/expenseReport.html"
+ 
+})
+
 });

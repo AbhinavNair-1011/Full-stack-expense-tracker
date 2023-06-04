@@ -78,7 +78,7 @@ class Users {
 
   static async forgotPassword(userEmail) {
     try {
-      let user = await users.findAll({
+      let user = await users.findOne({
         where: {
           email: userEmail,
         },

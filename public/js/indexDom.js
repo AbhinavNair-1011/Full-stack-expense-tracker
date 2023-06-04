@@ -80,6 +80,10 @@ window.addEventListener("DOMContentLoaded", () => {
   registerShift.addEventListener("click", (e) => {
     e.preventDefault();
     clearLoginWarning();
+    let cbtn = document.querySelector("#cancelOtp");
+    if(cbtn){
+cbtn.style.display="none"
+    }
     registerShift.style.textDecoration = "underline";
     loginShift.style.textDecoration = "none";
     registerShift.style.textDecorationColor = "black";
@@ -102,6 +106,10 @@ window.addEventListener("DOMContentLoaded", () => {
   loginShift.addEventListener("click", (e) => {
     e.preventDefault();
     clearRegisterWarning(name, email, phoneNumber, password);
+    let cbtn = document.querySelector("#cancelOtp");
+    if(cbtn){
+cbtn.style.display="none"
+    }
  
     registerShift.style.textDecoration = "none";
     loginShift.style.textDecoration = "underline";
@@ -415,6 +423,10 @@ window.addEventListener("DOMContentLoaded", () => {
     if (forgotPasswordSubmit.value === "Send otp in Email") {
       if (forgotPasswordEmail.value) {
         let email = { email: forgotPasswordEmail.value };
+        let cbtn = document.querySelector("#cancelOtp");
+        if(cbtn){
+    cbtn.style.display="initial"
+        }
 
         if (
           forgotPasswordEmail.parentElement.nextElementSibling.className ===
