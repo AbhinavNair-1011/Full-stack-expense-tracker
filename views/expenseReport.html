@@ -7,16 +7,20 @@
     <script src="../public/js/expenseReport.js"></script>
     <link rel="stylesheet" href="../public//css/expenseReport.css">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-
+    <script>if(!sessionStorage.getItem("loggedin")){
+        window.location.href="../../views/index.html";
+        
+      }</script>
     <title>Expense tracker</title>
     
 </head>
 <body>
-    <h1 id="heading">Day to Day Expense Report</h1>
+    <h1 id="heading">DAY TO DAY EXPENSE REPORT</h1>
     <div id="wrap">
         <form action="" id="dateForm">
             <label for="selectMonth" id="monthLabel">Select month :</label>
             <select name="selectMonth" id="selectMonth" >
+                <option disabled selected>Month</option>
                 <option value="January">January</option>
                 <option value="February">February</option>
                 <option value="March">March</option>
@@ -39,7 +43,7 @@
     
     
 </div>
-<p id="monthName">Month</p>
+<p id="monthName">MONTH</p>
     <table id="monthlyExpense" class="table">
       
         <thead id="monthlyTableHead" class="tableHead">
@@ -61,7 +65,7 @@
 
     </table>
     
-    <h1 id="yearlyReport">Yearly Report</h1>
+    <h1 id="yearlyReport">YEARLY REPORT</h1>
     <table id="yearlyExpense" class="table">
       
         <thead id="yearlyTableHead" class="tableHead">
@@ -120,17 +124,24 @@
                 <td id="december">December</td>
                 <td id="decemberAmount">0</td>
             </tr>
+            <tr id="totalRow">
+                <td id="total">TOTAL</td>
+                <td id="totalAmount">0</td>
+            </tr>
 
   
         </tbody>
 
     </table>
 
-    <div id="circle">
+    <div class="wrap">
+        <p style="color:white;text-align: center;">Download disabled for now</p>
+    <div class="circle">
         <div class="line1"></div>
         <div class="line2"></div>
         <div class="line3"></div>
     </div>
+</div>
  
 
 </body>

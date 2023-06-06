@@ -84,7 +84,7 @@ font-size: 14px;
   opacity: 0;
   width: 500px;
   box-shadow: 0 0 4px 0 black;
-  transition: opacity 0.2s ease-in;
+  transition: opacity 0.13s ease-in;
   min-width: 200px;
   min-height: 286px;
   display: flex;
@@ -103,7 +103,7 @@ font-size: 14px;
   z-index: 1;
   width: 500px;
   box-shadow: 0 0 4px 0 black;
-  transition: opacity 0.2s ease-in;
+  transition: opacity 0.13s ease-in;
   min-width: 200px;
 }
 
@@ -123,7 +123,7 @@ font-size: 14px;
   flex-direction: column;
   justify-content: center;
   box-shadow: 0 0 4px 0 black;
-  transition: opacity 0.4s ease-in;
+  transition: opacity 0.13s ease-in;
 }
 
 #loginForm:hover {
@@ -190,7 +190,7 @@ input {
   background-color: rgba(240, 248, 255, 0.575);
 }
 #forgotPassword{  
-    width: 100%;
+    /* width: 100%; */
     text-align: end;
     padding-right: 35px
 }
@@ -225,7 +225,7 @@ input {
 .loginDuplicateEntry {
   color: #fffb06;
   font-size: 14px;
-  width: 130px;
+  width: 150px;
   text-align: start;
   padding-left: 55px;
   margin-top: -11px;

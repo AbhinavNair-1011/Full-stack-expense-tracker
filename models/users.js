@@ -2,8 +2,8 @@ const sequelize = require("../database/connection");
 const Sequelize = require("sequelize");
 const {DataTypes}=require("sequelize")
 const dotenv = require("dotenv").config();
-const Sib = require("sib-api-v3-sdk");
 const { otp, Otp } = require("./otp");
+const sendResetEmail=require("../services/sendInBlue")
 
 const users = sequelize.define("users", {
   id: {
@@ -44,20 +44,19 @@ class Users {
     this.isPremiumMember = isPremiumMember;
   }
   async addUser() {
-    try {
-      return await users.create({
+
+     return await users.create({
         name: this.name,
         email: this.email,
         phoneNumber: this.phoneNumber,
         password: this.password,
         isPremiumMember: this.isPremiumMember,
       });
-    } catch (err) {
-      return err;
-    }
+     
   }
 
   static async validateUser(userDetails) {
+
     try {
       return await users.findOne({
         where: { email: userDetails.email },
@@ -87,24 +86,9 @@ class Users {
         let generatedOtp = Math.floor(
           Math.random() * ((999999-100000 ) + 1) + 100000
         );
-
-        const client = Sib.ApiClient.instance;
-        const apiKey = client.authentications["api-key"];
-        apiKey.apiKey = process.env.sib_key;
-
-        const transacEmailApi = new Sib.TransactionalEmailsApi();
-
-        const details = {
-          sender: {
-            email: "abhivish1011@gmail.com",
-            name: "Expense Tracker",
-          },
-          to: [{ email: userEmail }],
-          subject: "Forgot password",
-          TextContent: `Your OTP for resetting the password is ${generatedOtp}`,
-        };
-        transacEmailApi.sendTransacEmail(details);
-
+   
+       let messageId= await sendResetEmail(generatedOtp,userEmail);
+     
         let obj = new Otp(userEmail, generatedOtp);
         
         return await obj.insertIntoDatabase();
@@ -123,7 +107,7 @@ class Users {
         email:email
       }})
 
-      user.update({
+      await user.update({
         password:password
       })
 

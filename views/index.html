@@ -7,7 +7,13 @@
     <link rel="stylesheet" href="../public/css/index.css" />
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="../helper function/frontEnd/clearWarning.js"></script>
-
+    
+    <script>
+      if(sessionStorage.getItem("loggedin")=="true"){
+  window.location.href="./mainPage.html"
+  console.log("in")
+      }
+    </script>
     <title>Expense Tracker</title>
   </head>
   <body>
@@ -107,5 +113,7 @@
       </div>
     </main>
     <script src="../public/js/indexDom.js"></script>
+    
+  
   </body>
 </html>

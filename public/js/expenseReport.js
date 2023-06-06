@@ -3,6 +3,12 @@ async function fetchData(token) {
     headers: { authorization: token },
   });
 }
+async function downloadExpenses(token) {
+  return await axios.get(`http://localhost:3000/api/download-expenses`, {
+    headers: { authorization: token },
+  });
+}
+
 
 window.addEventListener("DOMContentLoaded", (e) => {
   let monthName = document.querySelector("#monthName");
@@ -13,16 +19,19 @@ window.addEventListener("DOMContentLoaded", (e) => {
   let token = localStorage.getItem("token");
   let monthlyDetails = [];
 
+  if(!sessionStorage.getItem("loggedin")){
+    window.location.href="../../views/index.html";
+  }
+  
+
   fetchData(token)
     .then((res) => {
       for (let each of res.data.data.result) {
         let x = each.expenseItem.toUpperCase();
         let y = each.expensePrice;
-        console.log(each.createdAt);
 
         let createdAt = new Date(each.createdAt);
         let date = createdAt.toLocaleDateString();
-        console.log(date)
         let monthNames = [
           "January",
           "February",
@@ -108,7 +117,7 @@ switch(each.month){
 }
 })
 
-
+document.querySelector("#totalAmount").innerText=totalExpense
 document.querySelector("#januaryAmount").innerText=yearlyExpense.january;
 document.querySelector("#februaryAmount").innerText=yearlyExpense.february;
 document.querySelector("#marchAmount").innerText=yearlyExpense.march;
@@ -123,7 +132,7 @@ document.querySelector("#novemberAmount").innerText=yearlyExpense.november
 document.querySelector("#decemberAmount").innerText=yearlyExpense.december
  
       selectMonth.addEventListener("change", (e) => {
-        monthName.innerText = selectMonth.value;
+        monthName.innerText = selectMonth.value.toUpperCase();
         let monthlyTableBody = document.querySelector("#monthlyTableBody");
         monthlyTableBody.textContent="";
         let newNoExpenseRow = document.querySelector("#newNoExpenseRow");
@@ -176,6 +185,7 @@ document.querySelector("#decemberAmount").innerText=yearlyExpense.december
 
     logout.addEventListener("click",(e)=>{
       localStorage.removeItem("token")   ; 
+      sessionStorage.removeItem("loggedin")
       window.location.href="../../views/index.html";
   
     })
@@ -185,6 +195,23 @@ document.querySelector("#decemberAmount").innerText=yearlyExpense.december
     window.location.href="../../views/mainPage.html";
                              
   })
+
+  // let downloadBtn=document.querySelector(".circle");
+
+  //   downloadBtn.addEventListener("click",(e)=>{
+  //     e.preventDefault()
+  //   downloadExpenses(token).then((res)=>{
+  //     let a=document.createElement("a");
+
+  //     a.href=res.data.data.Location;
+  //     a.download="expense.txt"
+  //     a.click();
+  //   })
+  //   .catch(err=>{
+  //     console.log(err)
+  //   })
+
+  // })
   
     
 });

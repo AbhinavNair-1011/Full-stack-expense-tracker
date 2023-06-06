@@ -1,4 +1,4 @@
-async function addUser(userDetails) {
+ async function addUser(userDetails) {
   return await axios.post("http://localhost:3000/api/add-user", userDetails);
 }
 async function validateUser(userDetails) {
@@ -18,6 +18,8 @@ async function updateUserPassword(details) {
 }
 
 window.addEventListener("DOMContentLoaded", () => {
+  // sessionStorage.removeItem("loggedin");
+
   let registerForm = document.querySelector("#registerForm");
   let registerBtn = document.querySelector("#register");
 
@@ -50,6 +52,8 @@ window.addEventListener("DOMContentLoaded", () => {
 
   let cancelButton = document.createElement("button");
 
+  loginEmail.value=""
+  loginPassword.value=""
 
   email.value = "";
   password.value = "";
@@ -102,6 +106,41 @@ cbtn.style.display="none"
     forgotPasswordNewConfirm.value = "";
     forgotPasswordEmail.removeAttribute("disabled");
 
+    if (name.value || email.value || phoneNumber.value || password.value) {
+      if (name.value) {
+        if (
+          name.parentElement.nextElementSibling.className === "duplicateEntry"
+        ) {
+          registerForm.removeChild(name.parentElement.nextElementSibling);
+        }
+      }
+      if (email.value) {
+        if (
+          email.parentElement.nextElementSibling.className === "duplicateEntry"
+        ) {
+          registerForm.removeChild(email.parentElement.nextElementSibling);
+        }
+      }
+      if (phoneNumber.value) {
+        if (
+          phoneNumber.parentElement.nextElementSibling.className ===
+          "duplicateEntry"
+        ) {
+          registerForm.removeChild(
+            phoneNumber.parentElement.nextElementSibling
+          );
+        }
+      }
+      if (password.value) {
+        if (
+          password.parentElement.nextElementSibling.className ===
+          "duplicateEntry"
+        ) {
+          registerForm.removeChild(password.parentElement.nextElementSibling);
+        }
+      }
+    }
+
   });
   loginShift.addEventListener("click", (e) => {
     e.preventDefault();
@@ -120,12 +159,15 @@ cbtn.style.display="none"
     registerForm.style.opacity = 0;
     setTimeout(() => {
       loginForm.style.zIndex = 1;
-    }, 220);
+    }, 134);
 
     name.value = "";
     email.value = "";
     password.value = "";
     phoneNumber.value = "";
+    loginEmail.value=""
+    loginPassword.value=""
+    
     forgotPasswordEmail.value = "";
     forgotPasswordOtp.value = "";
     forgotPasswordNew.value = "";
@@ -178,7 +220,7 @@ cbtn.style.display="none"
           ) {
             if (err.response.data.errorType === "email") {
               let p = document.createElement("p");
-              p.innerHTML = `*User with email : ${err.response.data.errorValue} already exists`;
+              p.innerHTML = `* ${err.response.data.errorValue} already exists`;
               p.setAttribute("class", "duplicateEntry");
               registerForm.insertBefore(
                 p,
@@ -187,7 +229,7 @@ cbtn.style.display="none"
               email.value = "";
             } else if (err.response.data.errorType === "phoneNumber") {
               let p = document.createElement("p");
-              p.innerHTML = `*User with phoneNumber : ${err.response.data.errorValue} already exists`;
+              p.innerHTML = `*PhoneNumber : ${err.response.data.errorValue} already exists`;
               p.setAttribute("class", "duplicateEntry");
               registerForm.insertBefore(
                 p,
@@ -301,6 +343,7 @@ cbtn.style.display="none"
         .then((result) => {
           if (result.data.authentication === true) {
             localStorage.setItem("token", result.data.token);
+            sessionStorage.setItem("loggedin",true);
             window.location.href = "../../views/mainPage.html";
           } else if (result.data.authentication === false) {
             if (
@@ -517,7 +560,9 @@ cbtn.style.display="none"
               forgotPasswordNewWrap.style.display = "flex";
               forgotPasswordNewConfirmWrap.style.display = "flex";
               forgotPasswordNewConfirm.value = "";
-
+              cancelButton.parentElement.removeChild(cancelButton)
+              forgotPasswordSubmit.value="Reset Password"
+            
               forgotPasswordOtp.value = "";
               forgotPasswordNew.value = "";
               forgotPasswordNewConfirm.value = "";
@@ -597,6 +642,7 @@ cbtn.style.display="none"
               loginForm.style.zIndex = "1";
               forgotPasswordForm.style.opacity = "0";
               forgotPasswordForm.style.zIndex = "0";
+
             })
             .catch((err) => {});
         } else {

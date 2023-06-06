@@ -6,9 +6,6 @@ module.exports = function jwtVerify(req, res, next) {
   if (userDetails) {
     req.userDetails = userDetails;
     next();
-  } else {
-    return res.json({
-      status: "failed",
-    });
-  }
+  } 
+ 
 };

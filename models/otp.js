@@ -26,28 +26,41 @@ class Otp{
         this.otp=otp 
     }
     async insertIntoDatabase(){
-        let user=await otp.findAll({where:{
-            userEmail:this.email
-        }})
-       
-        if(user){
-      
-            otp.destroy({where:{
+        let t=await sequelize.transaction();
+        try{
+            let user=await otp.findAll({where:{
                 userEmail:this.email
-            }});
-            return await otp.create({
-                userEmail:this.email,
-                 otp:this.otp
-     
-             });
-        }else{
-            
-            return await otp.create({
-                userEmail:this.email,
-                 otp:this.otp
-     
-             });
+            }})
+           
+            if(user){
+          
+                await otp.destroy({where:{
+                    userEmail:this.email
+                }});
+                let createdOtp=await otp.create({
+                    userEmail:this.email,
+                     otp:this.otp     
+                 },{transaction:t});
+                 t.commit()
+                 return createdOtp;
+    
+            }else{
+                
+                let createdOtp= await otp.create({
+                    userEmail:this.email,
+                     otp:this.otp
+    
+                 },{transaction:t});
+                 t.commit()
+                 return createdOtp;
+            }
+
+        }catch(err){
+            t.rollback();
+            return err;
         }
+
+       
     
        
         

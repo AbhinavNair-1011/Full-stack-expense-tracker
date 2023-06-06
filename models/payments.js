@@ -23,6 +23,7 @@ class Payments {
     this.paymentSignature = paymentSignature;
   }
   async insertIntoDatabase(userEmail) {
+    let t=await sequelize.transaction();
     try {
       let user = await users.findOne({ where: { email: userEmail } });
 
@@ -35,13 +36,16 @@ class Payments {
           paymentId: this.paymentId,
           paymentSignature: this.paymentSignature,
           userId: userId,
-        });
+        },{transaction:t})
 
-        return await user.update({
+        let updatePremium= await user.update({
           isPremiumMember: true,
-        });
+        },{transaction:t});
+        t.commit();
+        return updatePremium;
       }
     } catch (err) {
+      t.rollback();
       return err;
     }
   }

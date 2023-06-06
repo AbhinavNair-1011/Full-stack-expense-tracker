@@ -1,7 +1,8 @@
 const sequelize = require("../database/connection");
-const Sequelize = require("sequelize");
 const { users, Users } = require("../models/users");
-const{DataTypes}=require("sequelize")
+const{DataTypes,Sequelize}=require("sequelize");
+const awsConnect=require("../services/aws")
+
 
 const expenses = sequelize.define("expenses", {
   id: {
@@ -48,24 +49,29 @@ class Data {
     }
   }
   async insertIntoDatabase() {
+    let t=await sequelize.transaction();
     try {
       let user = await users.findOne({
         where: {
-          email: this.email,
-        },
+          email: this.email
+        }
       });
       let userId = user.dataValues.id;
-      return expenses.create({
+      let expense=await expenses.create({
         expenseItem: this.item.toUpperCase(),
         expensePrice: this.price,
-        userId: userId,
-      });
+        userId: userId
+      },{transaction:t});
+      t.commit();
+      return expense;
     } catch (err) {
+      t.rollback();
       return err;
     }
   }
 
   static async updateData(data, userDetails) {
+    let t=await sequelize.transaction()
     try {
       let user = await users.findOne({
         where: {
@@ -83,20 +89,27 @@ class Data {
         },
       });
       if (data.todo === "onlyItemName") {
-        return await expense.update({
+        let updatedExpense=await expense.update({
           expenseItem: data.newExpenseItem.toUpperCase(),
-        });
+        },{transaction:t});
+        t.commit();
+        return updatedExpense
       } else if (data.todo === "onlyItemPrice") {
-        return await expense.update({
+        let updatedExpense=await expense.update({
           expensePrice: data.newExpensePrice,
-        });
+        },{transaction:t});
+        t.commit();
+        return updatedExpense
       } else if (data.todo === "itemName&itemPrice") {
-        return await expense.update({
+        let updatedExpense=await expense.update({
           expenseItem: data.newExpenseItem.toUpperCase(),
           expensePrice: data.newExpensePrice,
-        });
+        },{transaction:t});
+        t.commit();
+        return updatedExpense
       }
     } catch (err) {
+      t.rollback();
       return err;
     }
   }
@@ -147,6 +160,34 @@ class Data {
       return err;
     }
   }
+  static async downloadExpense(email, id) {
+    try {
+      let awsS3 = awsConnect();
+      let result = await Data.fetchAll(email);
+      let stringData = JSON.stringify(result);
+  
+      let options = {
+        Bucket: "expensedownloadbucket",
+        Key: `expense/${id}/${new Date().toISOString()}.txt`,
+        Body: stringData,
+        ACL:"public-read"
+      };
+  
+      return new Promise((resolve, reject) => {
+        awsS3.upload(options, (err, uploaded) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(uploaded);
+          }
+        });
+      });
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  
 }
 
 module.exports = { Data, expenses };

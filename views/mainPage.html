@@ -16,9 +16,9 @@
 
     <link rel="stylesheet" href="/public/css/style.css">
     <script>
-         if(!localStorage.getItem("token")){
-    window.location.href="../../views/index.html"
-    }
+        if(!sessionStorage.getItem("loggedin")){
+  window.location.href="../../views/index.html";
+}
     </script>
 </head>
 

@@ -45,17 +45,9 @@ async function isPremiumMember(d, token) {
 }
 async function fetchLeaderBoard() {
   return await axios.get("http://localhost:3000/api/fetch-leaderboard");
-
 }
 
-
-if(!localStorage.getItem("token")){
-  window.location.href="../../views/index.html"
-  }
 document.addEventListener("DOMContentLoaded", (e) => {
-  
-  
- 
   let expenseItems = document.querySelector("#expenseInput");
   let expensePrice = document.querySelector("#expensePrice");
   let submitBtn = document.querySelector("#submitBtn");
@@ -72,8 +64,6 @@ document.addEventListener("DOMContentLoaded", (e) => {
   let totalExpense = 0;
 
   let token = localStorage.getItem("token");
-
-
 
   let t = document.createElement("p");
   let span4 = document.createElement("span");
@@ -98,8 +88,6 @@ document.addEventListener("DOMContentLoaded", (e) => {
         tr.appendChild(td);
         tr.appendChild(td2);
         tableBody.appendChild(tr);
-  
-    
       }
     })
     .catch((err) => console.log(err));
@@ -113,11 +101,9 @@ document.addEventListener("DOMContentLoaded", (e) => {
         leaderBoardDiv.style.visibility = "hidden";
       } else {
         let leaderBoardDiv = document.querySelector("#premiumMember");
-        let profile=document.querySelector(".profile");
-        profile.style.justifyContent="center"
+        let profile = document.querySelector(".profile");
+        profile.style.justifyContent = "center";
         leaderBoardDiv.style.visibility = "visible";
-        
-
       }
     })
     .catch((err) => console.log(err));
@@ -125,20 +111,12 @@ document.addEventListener("DOMContentLoaded", (e) => {
   fetchData(token)
     .then((res) => {
       details.email = res.data.email;
-      
-     
-      
-
-  
-      
 
       let data = res.data.data.result;
 
-   data.sort((a,b)=> new Date(b.createdAt)-new Date(a.createdAt))
-   
-      for (let each of data) {
+      data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
-        
+      for (let each of data) {
         let x = each.expenseItem.toUpperCase();
         let y = each.expensePrice;
 
@@ -161,7 +139,6 @@ document.addEventListener("DOMContentLoaded", (e) => {
         let span2 = document.createElement("span");
         let dateSpan = document.createElement("span");
 
-        
         li.appendChild(document.createTextNode("Expense Item :  "));
         span.appendChild(document.createTextNode(x));
         li.appendChild(span);
@@ -171,7 +148,6 @@ document.addEventListener("DOMContentLoaded", (e) => {
         li.appendChild(document.createTextNode("    Date :  "));
         dateSpan.appendChild(document.createTextNode(` ${date}`));
         li.appendChild(dateSpan);
-        
 
         li.setAttribute("class", "value");
 
@@ -188,24 +164,20 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
       let inputForm = document.querySelector("#inputForm");
 
-      
-        
-        span4.innerText = totalExpense;
+      span4.innerText = totalExpense;
 
       t.appendChild(document.createTextNode("Total Expense : "));
       t.appendChild(span4);
       inputForm.appendChild(t);
 
-      let logout=document.querySelector("#logout");
-      logout.style.display="initial"
-      
+      let logout = document.querySelector("#logout");
+      logout.style.display = "initial";
+
       let userNameParagrah = document.querySelector("#userName");
       let userName = res.data.name;
       userNameParagrah.innerText = "Welcome " + userName;
-      
+
       userNameParagrah.style.visibility = "visible";
-    
-      
     })
     .catch((err) => {
       span4.innerText = "0";
@@ -214,7 +186,6 @@ document.addEventListener("DOMContentLoaded", (e) => {
       inputForm.appendChild(t);
     });
 
-   
   submitBtn.addEventListener("click", (e) => {
     e.preventDefault();
 
@@ -273,7 +244,6 @@ document.addEventListener("DOMContentLoaded", (e) => {
       }
 
       addData(details, token).then((res) => {
-        
         let createdAt = new Date(res.data.data.createdAt);
         let date = createdAt.toLocaleDateString();
 
@@ -291,8 +261,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
         let span = document.createElement("span");
         let span2 = document.createElement("span");
         let dateSpan = document.createElement("span");
-        
-        
+
         li.appendChild(document.createTextNode("Expense Item :  "));
         span.appendChild(document.createTextNode(eiValue.toUpperCase()));
         li.appendChild(span);
@@ -301,8 +270,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
         li.appendChild(span2);
         li.appendChild(document.createTextNode("    Date :  "));
         dateSpan.appendChild(document.createTextNode(` ${date}`));
-        li.appendChild(dateSpan); 
-       
+        li.appendChild(dateSpan);
 
         totalExpense += Number(epValue);
 
@@ -318,10 +286,10 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
         li.appendChild(deleteBtn);
         li.appendChild(editBtn);
-        list.insertBefore(li,list.firstChild)
-      });
+        list.insertBefore(li, list.firstChild);
+      })
+      .catch(err=>console.log(err))
 
-      
       expenseItems.value = "";
       expensePrice.value = "";
     } else if (eiValue || epValue) {
@@ -592,8 +560,8 @@ document.addEventListener("DOMContentLoaded", (e) => {
               .then((res) => {
                 let premiumBtn = document.querySelector("#razorPay");
                 let leaderBoardDiv = document.querySelector("#premiumMember");
-                let profile=document.querySelector(".profile");
-                 profile.style.justifyContent="center"
+                let profile = document.querySelector(".profile");
+                profile.style.justifyContent = "center";
                 premiumBtn.style.display = "none";
                 leaderBoardDiv.style.visibility = "visible";
               })
@@ -604,7 +572,9 @@ document.addEventListener("DOMContentLoaded", (e) => {
         rzp1.open();
       })
 
-      .catch((err) => {});
+      .catch((err) => {
+        console.log(err);
+      });
   });
 
   let leaderboardBtn = document.querySelector("#leaderBoard");
@@ -612,13 +582,13 @@ document.addEventListener("DOMContentLoaded", (e) => {
   let leaderBoardDiv = document.querySelector("#leaderBoardDiv");
 
   leaderboardBtn.addEventListener("click", (e) => {
-    leaderBoardDiv.style.display="initial";
-    search.style.zIndex="0";
+    leaderBoardDiv.style.display = "initial";
+    search.style.zIndex = "0";
   });
 
   leaderBoardCloseBtn.addEventListener("click", (e) => {
-    search.style.zIndex="6";
-    leaderBoardDiv.style.display="none"
+    search.style.zIndex = "6";
+    leaderBoardDiv.style.display = "none";
   });
 
   let p = document.createElement("p");
@@ -632,17 +602,15 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
   leaderBoardDiv.insertBefore(p, leaderBoardCloseBtn.nextElementSibling);
 
-  let logout=document.querySelector("#logout");
+  let logout = document.querySelector("#logout");
 
-  logout.addEventListener("click",(e)=>{
-    localStorage.removeItem("token")   ; 
-    window.location.href="../../views/index.html";
-
-  })
-  let expenseReport=document.querySelector("#expenseReport");
-expenseReport.addEventListener("click",(e)=>{
-  window.location.href="../../views/expenseReport.html"
- 
-})
-
+  logout.addEventListener("click", (e) => {
+    localStorage.removeItem("token");
+    sessionStorage.removeItem("loggedin");
+    window.location.href = "../../views/index.html";
+  });
+  let expenseReport = document.querySelector("#expenseReport");
+  expenseReport.addEventListener("click", (e) => {
+    window.location.href = "../../views/expenseReport.html";
+  });
 });
