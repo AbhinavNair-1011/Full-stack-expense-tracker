@@ -1,4 +1,4 @@
- async function addUser(userDetails) {
+async function addUser(userDetails) {
   return await axios.post("http://localhost:3000/api/add-user", userDetails);
 }
 async function validateUser(userDetails) {
@@ -52,23 +52,26 @@ window.addEventListener("DOMContentLoaded", () => {
 
   let cancelButton = document.createElement("button");
 
-  loginEmail.value=""
-  loginPassword.value=""
-
-  email.value = "";
-  password.value = "";
-  password.addEventListener("click", (e) => {
+    name.value = "";
+    email.value = "";
     password.value = "";
-  });
-  name.value = "";
-  phoneNumber.value = "";
-  forgotPasswordEmail.value = "";
-  forgotPasswordOtp.value = "";
-  forgotPasswordNew.value = "";
-  forgotPasswordNewConfirm.value = "";
-  let turur=false;
+    phoneNumber.value = "";
+    loginEmail.setAttribute("autocomplete","off")
+    loginPassword.value = "";
+  
+    forgotPasswordEmail.value = "";
+    forgotPasswordOtp.value = "";
+    forgotPasswordNew.value = "";
+    forgotPasswordNewConfirm.value = "";
+  
 
-  if (!localStorage.getItem("token")) {
+  
+
+  
+    loginPassword.value = "";
+    loginEmail.value = "";
+
+
     loginForm.style.zIndex = 1;
     registerForm.style.opacity = 0;
     loginForm.style.opacity = 1;
@@ -79,14 +82,14 @@ window.addEventListener("DOMContentLoaded", () => {
     loginShift.style.textDecoration = "underline";
     loginShift.style.textDecorationColor = "black";
     registerForm.style.transition = "opacity 0s ease-in";
-  }
+  
 
   registerShift.addEventListener("click", (e) => {
     e.preventDefault();
     clearLoginWarning();
     let cbtn = document.querySelector("#cancelOtp");
-    if(cbtn){
-cbtn.style.display="none"
+    if (cbtn) {
+      cbtn.style.display = "none";
     }
     registerShift.style.textDecoration = "underline";
     loginShift.style.textDecoration = "none";
@@ -98,8 +101,13 @@ cbtn.style.display="none"
 
     loginForm.style.zIndex = 0;
     registerForm.style.transition = "opacity 0.2s ease-in";
+    name.value = "";
+    email.value = "";
+    password.value = "";
+    phoneNumber.value = "";
     loginEmail.value = "";
     loginPassword.value = "";
+
     forgotPasswordEmail.value = "";
     forgotPasswordOtp.value = "";
     forgotPasswordNew.value = "";
@@ -140,16 +148,15 @@ cbtn.style.display="none"
         }
       }
     }
-
   });
   loginShift.addEventListener("click", (e) => {
     e.preventDefault();
     clearRegisterWarning(name, email, phoneNumber, password);
     let cbtn = document.querySelector("#cancelOtp");
-    if(cbtn){
-cbtn.style.display="none"
+    if (cbtn) {
+      cbtn.style.display = "none";
     }
- 
+
     registerShift.style.textDecoration = "none";
     loginShift.style.textDecoration = "underline";
     loginShift.style.textDecorationColor = "black";
@@ -165,18 +172,14 @@ cbtn.style.display="none"
     email.value = "";
     password.value = "";
     phoneNumber.value = "";
-    loginEmail.value=""
-    loginPassword.value=""
-    
+    loginEmail.value = "";
+    loginPassword.value = "";
+
     forgotPasswordEmail.value = "";
     forgotPasswordOtp.value = "";
     forgotPasswordNew.value = "";
     forgotPasswordNewConfirm.value = "";
     forgotPasswordEmail.removeAttribute("disabled");
-    
-    
-    
-    
   });
 
   let userDetails = {
@@ -343,7 +346,7 @@ cbtn.style.display="none"
         .then((result) => {
           if (result.data.authentication === true) {
             localStorage.setItem("token", result.data.token);
-            sessionStorage.setItem("loggedin",true);
+            sessionStorage.setItem("loggedin", true);
             window.location.href = "../../views/mainPage.html";
           } else if (result.data.authentication === false) {
             if (
@@ -467,8 +470,8 @@ cbtn.style.display="none"
       if (forgotPasswordEmail.value) {
         let email = { email: forgotPasswordEmail.value };
         let cbtn = document.querySelector("#cancelOtp");
-        if(cbtn){
-    cbtn.style.display="initial"
+        if (cbtn) {
+          cbtn.style.display = "initial";
         }
 
         if (
@@ -497,15 +500,16 @@ cbtn.style.display="none"
                   p,
                   forgotPasswordEmail.parentElement.nextElementSibling
                 );
-               
               }
             } else {
-              let forgotPasswordWrap= document.querySelector("#forgotPasswordWrap")
-              
-              cancelButton.innerText="Resend otp"
-              cancelButton.setAttribute("id", "cancelOtp");         
+              let forgotPasswordWrap = document.querySelector(
+                "#forgotPasswordWrap"
+              );
 
-               forgotPasswordWrap.appendChild(cancelButton);
+              cancelButton.innerText = "Resend otp";
+              cancelButton.setAttribute("id", "cancelOtp");
+
+              forgotPasswordWrap.appendChild(cancelButton);
 
               forgotPasswordEmail.setAttribute("disabled", "");
               forgotPasswordOtpWrap.style.display = "flex";
@@ -560,9 +564,9 @@ cbtn.style.display="none"
               forgotPasswordNewWrap.style.display = "flex";
               forgotPasswordNewConfirmWrap.style.display = "flex";
               forgotPasswordNewConfirm.value = "";
-              cancelButton.parentElement.removeChild(cancelButton)
-              forgotPasswordSubmit.value="Reset Password"
-            
+              cancelButton.parentElement.removeChild(cancelButton);
+              forgotPasswordSubmit.value = "Reset Password";
+
               forgotPasswordOtp.value = "";
               forgotPasswordNew.value = "";
               forgotPasswordNewConfirm.value = "";
@@ -642,7 +646,6 @@ cbtn.style.display="none"
               loginForm.style.zIndex = "1";
               forgotPasswordForm.style.opacity = "0";
               forgotPasswordForm.style.zIndex = "0";
-
             })
             .catch((err) => {});
         } else {
@@ -736,7 +739,6 @@ cbtn.style.display="none"
   });
   let resendOtpCount = 0;
 
-  
   cancelButton.addEventListener("click", (e) => {
     resendOtpCount++;
     e.preventDefault();
@@ -744,7 +746,7 @@ cbtn.style.display="none"
       if (
         forgotPasswordOtp.parentElement.nextElementSibling.className ===
         "loginDuplicateEntry"
-       ) {
+      ) {
         forgotPasswordForm.removeChild(
           forgotPasswordOtp.parentElement.nextElementSibling
         );
@@ -756,11 +758,11 @@ cbtn.style.display="none"
         p,
         forgotPasswordOtp.parentElement.nextElementSibling
       );
-    }else if (resendOtpCount === 2) {
+    } else if (resendOtpCount === 2) {
       if (
         forgotPasswordOtp.parentElement.nextElementSibling.className ===
         "loginDuplicateEntry"
-       ) {
+      ) {
         forgotPasswordForm.removeChild(
           forgotPasswordOtp.parentElement.nextElementSibling
         );
@@ -773,17 +775,15 @@ cbtn.style.display="none"
         forgotPasswordOtp.parentElement.nextElementSibling
       );
     }
-    
 
     if (resendOtpCount === 3) {
-
       let btn = document.querySelector("#cancelOtp");
-       btn.parentElement.removeChild(btn)
-       
+      btn.parentElement.removeChild(btn);
+
       if (
         forgotPasswordOtp.parentElement.nextElementSibling.className ===
         "loginDuplicateEntry"
-       ) {
+      ) {
         forgotPasswordForm.removeChild(
           forgotPasswordOtp.parentElement.nextElementSibling
         );
@@ -796,15 +796,10 @@ cbtn.style.display="none"
         forgotPasswordOtp.parentElement.nextElementSibling
       );
       // e.target.parentElement.removeChild(e.target)
-
-      
     }
 
     forgotPassword({ email: forgotPasswordEmail.value })
       .then((res) => {})
       .then((err) => {});
   });
-    
-
-
 });

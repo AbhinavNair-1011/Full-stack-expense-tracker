@@ -13,7 +13,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
         crossorigin="anonymous"></script>
-
     <link rel="stylesheet" href="/public/css/style.css">
     <script>
         if(!sessionStorage.getItem("loggedin")){
@@ -32,9 +31,10 @@
     <main id="main">
         <div class="profile">
             <p id="userName" style="visibility:hidden">Welcome abhinav </p>
-           
+           <div id="premiumWrap">
             <button id="razorPay" style="display:none">Buy Premium Membership</button>
             <button id="logout" style="display:none">Logout</button>
+        </div>
             <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
         </div>
         <div class="premiumMember" id="premiumMember" style="visibility:hidden">
@@ -74,7 +74,9 @@
                     </div>
                     <div>
                         <div id="submitDiv" class="row">
-                            <input type="submit" name="submit" id="submitBtn" value="Submit">
+                            
+                            <input type="submit" name="submit" id="submitBtn" value="Submit" >
+                    
                         </div>
 
                     </div>

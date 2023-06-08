@@ -46,6 +46,12 @@ async function isPremiumMember(d, token) {
 async function fetchLeaderBoard() {
   return await axios.get("http://localhost:3000/api/fetch-leaderboard");
 }
+async function expensesPagination(token, number) {
+  return await axios.get("http://localhost:3000/api/expenses-pagination", {
+    headers: { authorization: token },
+    params: { number: number },
+  });
+}
 
 document.addEventListener("DOMContentLoaded", (e) => {
   let expenseItems = document.querySelector("#expenseInput");
@@ -53,12 +59,13 @@ document.addEventListener("DOMContentLoaded", (e) => {
   let submitBtn = document.querySelector("#submitBtn");
   let list = document.querySelector("#detailsList");
   let details = {};
+  let allExpense = [];
   expenseItems.value = "";
   expensePrice.value = "";
 
   list.style.border = "1px solid white";
   submitBtn.style.backgroundColor = "grey";
-
+    let hiddenElements;
   let pombajomba;
   let localStorageKey = [];
   let totalExpense = 0;
@@ -108,37 +115,180 @@ document.addEventListener("DOMContentLoaded", (e) => {
     })
     .catch((err) => console.log(err));
 
-  fetchData(token)
+  /*--------------------------------------------------------------------*/
+  /*--------------------------------------------------------------------*/
+
+  /*--------------------------------------------------------------------*/
+
+  /*--------------------------------------------------------------------*/
+
+  expensesPagination(token).then((res) => {
+    let detailsSectionDiv = document.querySelector("#detailsSectionDiv");
+
+    let data = res.data.paginatedExpenses;
+    let totalPageCount = res.data.totalPageCount;
+
+    let div = document.createElement("div");
+    div.setAttribute("id", "paginationDiv");
+
+    for (let i = 1; i <= totalPageCount; i++) {
+      let button = document.createElement("button");
+      button.setAttribute("id", "paginationButton");
+      button.setAttribute("class", "paginationbtn");
+
+      button.innerText = `${i}`;
+      div.appendChild(button);
+    }
+    detailsSectionDiv.appendChild(div);
+
+    data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+    for (let each of data) {
+      let x = each.expenseItem.toUpperCase();
+      let y = each.expensePrice;
+
+      let createdAt = new Date(each.createdAt);
+      let date = createdAt.toLocaleDateString();
+
+      let editBtn = document.createElement("button");
+      let deleteBtn = document.createElement("button");
+
+      editBtn.appendChild(document.createTextNode("EDIT"));
+      deleteBtn.appendChild(document.createTextNode("DETELE"));
+      editBtn.setAttribute("class", "edit");
+      deleteBtn.setAttribute("class", "delete");
+      editBtn.style.float = "right";
+      deleteBtn.style.float = "right";
+
+      let li = document.createElement("li");
+      let span = document.createElement("span");
+      let span2 = document.createElement("span");
+      let dateSpan = document.createElement("span");
+
+      li.appendChild(document.createTextNode("Expense :  "));
+      span.appendChild(document.createTextNode(x));
+      li.appendChild(span);
+      li.appendChild(document.createTextNode("        Price :  "));
+      span2.appendChild(document.createTextNode(y));
+      li.appendChild(span2);
+      li.appendChild(document.createTextNode("    Date :  "));
+      dateSpan.appendChild(document.createTextNode(` ${date}`));
+      li.appendChild(dateSpan);
+
+      li.setAttribute("class", "value");
+
+      li.style.fontWeight = "bold";
+      li.style.fontSize = "21px";
+      editBtn.style.fontSize = "14px";
+      deleteBtn.style.fontSize = "14px";
+      editBtn.style.backgroundColor = "yellow";
+      deleteBtn.style.backgroundColor = "red";
+      li.appendChild(deleteBtn);
+      li.appendChild(editBtn);
+      list.appendChild(li);
+    }
+
+    let logout = document.querySelector("#logout");
+    logout.style.display = "initial";
+
+    let userNameParagrah = document.querySelector("#userName");
+    let userName = res.data.name;
+    userNameParagrah.innerText = "Welcome " + userName;
+
+    userNameParagrah.style.visibility = "visible";
+
+    let paginationButtons = document.querySelectorAll(".paginationbtn");
+
+    for (let each of paginationButtons) {
+      each.addEventListener("click", (e) => {
+        e.preventDefault();
+      
+        let pageNumber = e.target.innerText;
+        expensesPagination(token, pageNumber)
+          .then((res) => {
+            let data = res.data.paginatedExpenses; 
+            let ol = document.querySelector("#detailsList");
+            ol.innerHTML = "";
+
+            data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+            for (let each of data) {
+              let x = each.expenseItem.toUpperCase();
+              let y = each.expensePrice;
+
+              let createdAt = new Date(each.createdAt);
+              let date = createdAt.toLocaleDateString();
+
+              let editBtn = document.createElement("button");
+              let deleteBtn = document.createElement("button");
+
+              editBtn.appendChild(document.createTextNode("EDIT"));
+              deleteBtn.appendChild(document.createTextNode("DETELE"));
+              editBtn.setAttribute("class", "edit");
+              deleteBtn.setAttribute("class", "delete");
+              editBtn.style.float = "right";
+              deleteBtn.style.float = "right";
+
+              let li = document.createElement("li");
+              let span = document.createElement("span");
+              let span2 = document.createElement("span");
+              let dateSpan = document.createElement("span");
+
+              li.appendChild(document.createTextNode("Expense :  "));
+              span.appendChild(document.createTextNode(x));
+              li.appendChild(span);
+              li.appendChild(document.createTextNode("        Price :  "));
+              span2.appendChild(document.createTextNode(y));
+              li.appendChild(span2);
+              li.appendChild(document.createTextNode("    Date :  "));
+              dateSpan.appendChild(document.createTextNode(` ${date}`));
+              li.appendChild(dateSpan);
+
+              li.setAttribute("class", "value");
+
+              li.style.fontWeight = "bold";
+              li.style.fontSize = "21px";
+              editBtn.style.fontSize = "14px";
+              deleteBtn.style.fontSize = "14px";
+              editBtn.style.backgroundColor = "yellow";
+              deleteBtn.style.backgroundColor = "red";
+              li.appendChild(deleteBtn);
+              li.appendChild(editBtn);
+              list.appendChild(li);
+            }
+            list.scrollIntoView({behavior:"instant",block:"start"});
+            fetchData(token)
     .then((res) => {
       details.email = res.data.email;
 
       let data = res.data.data.result;
-
+  
       data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-
+  
       for (let each of data) {
         let x = each.expenseItem.toUpperCase();
         let y = each.expensePrice;
-
+  
         let createdAt = new Date(each.createdAt);
         let date = createdAt.toLocaleDateString();
-
+  
         totalExpense += y;
         let editBtn = document.createElement("button");
         let deleteBtn = document.createElement("button");
-
+  
         editBtn.appendChild(document.createTextNode("EDIT"));
         deleteBtn.appendChild(document.createTextNode("DETELE"));
         editBtn.setAttribute("class", "edit");
         deleteBtn.setAttribute("class", "delete");
         editBtn.style.float = "right";
         deleteBtn.style.float = "right";
-
+  
         let li = document.createElement("li");
+        li.style.display = "none";
         let span = document.createElement("span");
         let span2 = document.createElement("span");
         let dateSpan = document.createElement("span");
-
+  
         li.appendChild(document.createTextNode("Expense Item :  "));
         span.appendChild(document.createTextNode(x));
         li.appendChild(span);
@@ -148,9 +298,9 @@ document.addEventListener("DOMContentLoaded", (e) => {
         li.appendChild(document.createTextNode("    Date :  "));
         dateSpan.appendChild(document.createTextNode(` ${date}`));
         li.appendChild(dateSpan);
-
+  
         li.setAttribute("class", "value");
-
+  
         li.style.fontWeight = "bold";
         li.style.fontSize = "21px";
         editBtn.style.fontSize = "14px";
@@ -161,34 +311,92 @@ document.addEventListener("DOMContentLoaded", (e) => {
         li.appendChild(editBtn);
         list.appendChild(li);
       }
-
-      let inputForm = document.querySelector("#inputForm");
-
-      span4.innerText = totalExpense;
-
-      t.appendChild(document.createTextNode("Total Expense : "));
-      t.appendChild(span4);
-      inputForm.appendChild(t);
-
-      let logout = document.querySelector("#logout");
-      logout.style.display = "initial";
-
-      let userNameParagrah = document.querySelector("#userName");
-      let userName = res.data.name;
-      userNameParagrah.innerText = "Welcome " + userName;
-
-      userNameParagrah.style.visibility = "visible";
+  
+      hiddenElements = document.querySelectorAll('.value[style*="display: none"]');
+  
+     
     })
-    .catch((err) => {
-      span4.innerText = "0";
+    .catch((err) => {});
+
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      });
+    }
+  });
+
+  fetchData(token)
+    .then((res) => {
+      details.email = res.data.email;
+
+      let data = res.data.data.result;
+  
+      data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  
+      for (let each of data) {
+        let x = each.expenseItem.toUpperCase();
+        let y = each.expensePrice;
+  
+        let createdAt = new Date(each.createdAt);
+        let date = createdAt.toLocaleDateString();
+  
+        totalExpense += y;
+        let editBtn = document.createElement("button");
+        let deleteBtn = document.createElement("button");
+  
+        editBtn.appendChild(document.createTextNode("EDIT"));
+        deleteBtn.appendChild(document.createTextNode("DETELE"));
+        editBtn.setAttribute("class", "edit");
+        deleteBtn.setAttribute("class", "delete");
+        editBtn.style.float = "right";
+        deleteBtn.style.float = "right";
+  
+        let li = document.createElement("li");
+        li.style.display = "none";
+        let span = document.createElement("span");
+        let span2 = document.createElement("span");
+        let dateSpan = document.createElement("span");
+  
+        li.appendChild(document.createTextNode("Expense Item :  "));
+        span.appendChild(document.createTextNode(x));
+        li.appendChild(span);
+        li.appendChild(document.createTextNode("        Price :  "));
+        span2.appendChild(document.createTextNode(y));
+        li.appendChild(span2);
+        li.appendChild(document.createTextNode("    Date :  "));
+        dateSpan.appendChild(document.createTextNode(` ${date}`));
+        li.appendChild(dateSpan);
+  
+        li.setAttribute("class", "value");
+  
+        li.style.fontWeight = "bold";
+        li.style.fontSize = "21px";
+        editBtn.style.fontSize = "14px";
+        deleteBtn.style.fontSize = "14px";
+        editBtn.style.backgroundColor = "yellow";
+        deleteBtn.style.backgroundColor = "red";
+        li.appendChild(deleteBtn);
+        li.appendChild(editBtn);
+        list.appendChild(li);
+      }
+  
+      hiddenElements = document.querySelectorAll('.value[style*="display: none"]');
+  
+     
+      span4.innerText = totalExpense;
+  
       t.appendChild(document.createTextNode("Total Expense : "));
       t.appendChild(span4);
       inputForm.appendChild(t);
-    });
+    })
+    .catch((err) => {});
 
   submitBtn.addEventListener("click", (e) => {
     e.preventDefault();
-
+    var headingElement = document.getElementById('heading');
+    headingElement.scrollIntoView({ behavior: 'smooth' });
+  
     let s = document.querySelector("#totalSpan");
 
     let eiValue = expenseItems.value.trim();
@@ -243,52 +451,218 @@ document.addEventListener("DOMContentLoaded", (e) => {
         );
       }
 
-      addData(details, token).then((res) => {
-        let createdAt = new Date(res.data.data.createdAt);
-        let date = createdAt.toLocaleDateString();
+      addData(details, token)
+        .then((res) => {
+          totalExpense+= +epValue;
+          span4.innerText=totalExpense
+          expensesPagination(token).then((res) => {
+            let detailsSectionDiv = document.querySelector("#detailsSectionDiv");
+            let deletePaginationDiv=document.querySelector("#paginationDiv");
+             list.innerHTML="" 
+            deletePaginationDiv.remove();
 
+            let data = res.data.paginatedExpenses;
+            let totalPageCount = res.data.totalPageCount;
+        
+            let div = document.createElement("div");
+            div.setAttribute("id", "paginationDiv");
+            
+        
+            for (let i = 1; i <= totalPageCount; i++) {
+              let button = document.createElement("button");
+              button.setAttribute("id", "paginationButton");
+              button.setAttribute("class", "paginationbtn");
+        
+              button.innerText = `${i}`;
+              div.appendChild(button);
+            }
+            detailsSectionDiv.appendChild(div);
+        
+            data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        
+            for (let each of data) {
+              let x = each.expenseItem.toUpperCase();
+              let y = each.expensePrice;
+        
+              let createdAt = new Date(each.createdAt);
+              let date = createdAt.toLocaleDateString();
+        
+              let editBtn = document.createElement("button");
+              let deleteBtn = document.createElement("button");
+        
+              editBtn.appendChild(document.createTextNode("EDIT"));
+              deleteBtn.appendChild(document.createTextNode("DETELE"));
+              editBtn.setAttribute("class", "edit");
+              deleteBtn.setAttribute("class", "delete");
+              editBtn.style.float = "right";
+              deleteBtn.style.float = "right";
+        
+              let li = document.createElement("li");
+              let span = document.createElement("span");
+              let span2 = document.createElement("span");
+              let dateSpan = document.createElement("span");
+        
+              li.appendChild(document.createTextNode("Expense :  "));
+              span.appendChild(document.createTextNode(x));
+              li.appendChild(span);
+              li.appendChild(document.createTextNode("        Price :  "));
+              span2.appendChild(document.createTextNode(y));
+              li.appendChild(span2);
+              li.appendChild(document.createTextNode("    Date :  "));
+              dateSpan.appendChild(document.createTextNode(` ${date}`));
+              li.appendChild(dateSpan);
+        
+              li.setAttribute("class", "value");
+        
+              li.style.fontWeight = "bold";
+              li.style.fontSize = "21px";
+              editBtn.style.fontSize = "14px";
+              deleteBtn.style.fontSize = "14px";
+              editBtn.style.backgroundColor = "yellow";
+              deleteBtn.style.backgroundColor = "red";
+              li.appendChild(deleteBtn);
+              li.appendChild(editBtn);
+              list.appendChild(li);
+            }
+        
+            let logout = document.querySelector("#logout");
+            logout.style.display = "initial";
+        
+            let userNameParagrah = document.querySelector("#userName");
+            let userName = res.data.name;
+            userNameParagrah.innerText = "Welcome " + userName;
+        
+            userNameParagrah.style.visibility = "visible";
+        
+            let paginationButtons = document.querySelectorAll(".paginationbtn");
+        
+            for (let each of paginationButtons) {
+              each.addEventListener("click", (e) => {
+                e.preventDefault();
+                let pageNumber = e.target.innerText;
+                expensesPagination(token, pageNumber)
+                  .then((res) => {
+                    let data = res.data.paginatedExpenses;
+                    let ol = document.querySelector("#detailsList");
+                    ol.innerHTML = "";
+        
+                    data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        
+                    for (let each of data) {
+                      let x = each.expenseItem.toUpperCase();
+                      let y = each.expensePrice;
+        
+                      let createdAt = new Date(each.createdAt);
+                      let date = createdAt.toLocaleDateString();
+        
+                      let editBtn = document.createElement("button");
+                      let deleteBtn = document.createElement("button");
+        
+                      editBtn.appendChild(document.createTextNode("EDIT"));
+                      deleteBtn.appendChild(document.createTextNode("DETELE"));
+                      editBtn.setAttribute("class", "edit");
+                      deleteBtn.setAttribute("class", "delete");
+                      editBtn.style.float = "right";
+                      deleteBtn.style.float = "right";
+        
+                      let li = document.createElement("li");
+                      let span = document.createElement("span");
+                      let span2 = document.createElement("span");
+                      let dateSpan = document.createElement("span");
+        
+                      li.appendChild(document.createTextNode("Expense :  "));
+                      span.appendChild(document.createTextNode(x));
+                      li.appendChild(span);
+                      li.appendChild(document.createTextNode("        Price :  "));
+                      span2.appendChild(document.createTextNode(y));
+                      li.appendChild(span2);
+                      li.appendChild(document.createTextNode("    Date :  "));
+                      dateSpan.appendChild(document.createTextNode(` ${date}`));
+                      li.appendChild(dateSpan);
+        
+                      li.setAttribute("class", "value");
+        
+                      li.style.fontWeight = "bold";
+                      li.style.fontSize = "21px";
+                      editBtn.style.fontSize = "14px";
+                      deleteBtn.style.fontSize = "14px";
+                      editBtn.style.backgroundColor = "yellow";
+                      deleteBtn.style.backgroundColor = "red";
+                      li.appendChild(deleteBtn);
+                      li.appendChild(editBtn);
+                      list.appendChild(li);
+                    }
+                    list.scrollIntoView({behavior:"instant",block:"start"})
+                    fetchData(token)
+    .then((res) => {
+      details.email = res.data.email;
+
+      let data = res.data.data.result;
+  
+      data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  
+      for (let each of data) {
+        let x = each.expenseItem.toUpperCase();
+        let y = each.expensePrice;
+  
+        let createdAt = new Date(each.createdAt);
+        let date = createdAt.toLocaleDateString();
+  
+        totalExpense += y;
         let editBtn = document.createElement("button");
         let deleteBtn = document.createElement("button");
-
+  
         editBtn.appendChild(document.createTextNode("EDIT"));
         deleteBtn.appendChild(document.createTextNode("DETELE"));
         editBtn.setAttribute("class", "edit");
         deleteBtn.setAttribute("class", "delete");
         editBtn.style.float = "right";
         deleteBtn.style.float = "right";
-
+  
         let li = document.createElement("li");
+        li.style.display = "none";
         let span = document.createElement("span");
         let span2 = document.createElement("span");
         let dateSpan = document.createElement("span");
-
+  
         li.appendChild(document.createTextNode("Expense Item :  "));
-        span.appendChild(document.createTextNode(eiValue.toUpperCase()));
+        span.appendChild(document.createTextNode(x));
         li.appendChild(span);
         li.appendChild(document.createTextNode("        Price :  "));
-        span2.appendChild(document.createTextNode(epValue));
+        span2.appendChild(document.createTextNode(y));
         li.appendChild(span2);
         li.appendChild(document.createTextNode("    Date :  "));
         dateSpan.appendChild(document.createTextNode(` ${date}`));
         li.appendChild(dateSpan);
-
-        totalExpense += Number(epValue);
-
-        s.innerText = totalExpense;
-
+  
         li.setAttribute("class", "value");
+  
         li.style.fontWeight = "bold";
         li.style.fontSize = "21px";
         editBtn.style.fontSize = "14px";
         deleteBtn.style.fontSize = "14px";
         editBtn.style.backgroundColor = "yellow";
         deleteBtn.style.backgroundColor = "red";
-
         li.appendChild(deleteBtn);
         li.appendChild(editBtn);
-        list.insertBefore(li, list.firstChild);
-      })
-      .catch(err=>console.log(err))
+        list.appendChild(li);
+      }
+  
+      hiddenElements = document.querySelectorAll('.value[style*="display: none"]');
+  
+  
+    })
+    .catch((err) => {});
+
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                  });
+              });
+            }
+          });
+        })
+        .catch((err) => console.log(err));
 
       expenseItems.value = "";
       expensePrice.value = "";
@@ -326,7 +700,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
     if (e.target.classList.contains("delete")) {
       let ts = document.querySelector("#totalSpan");
-
+      
       let deletedPrice = e.target.parentElement.childNodes[3].textContent;
 
       ts.innerText = Number(ts.textContent) - Number(deletedPrice);
@@ -339,7 +713,233 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
       let userEmail = details.email;
 
-      deleteData(itemName, userEmail, token, itemPrice);
+      deleteData(itemName, userEmail, token, itemPrice).then((res) => {
+        list.scrollIntoView({behavior:"instant",block:"start"})
+        if (
+          expenseItems.parentElement.parentElement.nextElementSibling
+            .className === "duplicateEntry"
+        ) {
+          inputForm.removeChild(
+            expenseItems.parentElement.parentElement.nextElementSibling
+          );
+        }
+            
+        if (
+          expensePrice.parentElement.parentElement.nextElementSibling
+            .className === "duplicateEntry"
+        ) {
+          inputForm.removeChild(
+            expensePrice.parentElement.parentElement.nextElementSibling
+          );
+          }
+        expensesPagination(token).then((res) => {
+          let detailsSectionDiv = document.querySelector("#detailsSectionDiv");
+          let deletePaginationDiv=document.querySelector("#paginationDiv");
+
+
+    let data = res.data.paginatedExpenses;
+    let totalPageCount = res.data.totalPageCount;
+
+    let div = document.createElement("div");
+    div.setAttribute("id", "paginationDiv");
+
+    for (let i = 1; i <= totalPageCount; i++) {
+      let button = document.createElement("button");
+      button.setAttribute("id", "paginationButton");
+      button.setAttribute("class", "paginationbtn");
+
+      button.innerText = `${i}`;
+      div.appendChild(button);
+    }
+ 
+    deletePaginationDiv.remove();
+    detailsSectionDiv.appendChild(div);
+
+    data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    list.innerHTML="" 
+    for (let each of data) {
+      let x = each.expenseItem.toUpperCase();
+      let y = each.expensePrice;
+
+      let createdAt = new Date(each.createdAt);
+      let date = createdAt.toLocaleDateString();
+
+      let editBtn = document.createElement("button");
+      let deleteBtn = document.createElement("button");
+
+      editBtn.appendChild(document.createTextNode("EDIT"));
+      deleteBtn.appendChild(document.createTextNode("DETELE"));
+      editBtn.setAttribute("class", "edit");
+      deleteBtn.setAttribute("class", "delete");
+      editBtn.style.float = "right";
+      deleteBtn.style.float = "right";
+
+      let li = document.createElement("li");
+      let span = document.createElement("span");
+      let span2 = document.createElement("span");
+      let dateSpan = document.createElement("span");
+
+      li.appendChild(document.createTextNode("Expense :  "));
+      span.appendChild(document.createTextNode(x));
+      li.appendChild(span);
+      li.appendChild(document.createTextNode("        Price :  "));
+      span2.appendChild(document.createTextNode(y));
+      li.appendChild(span2);
+      li.appendChild(document.createTextNode("    Date :  "));
+      dateSpan.appendChild(document.createTextNode(` ${date}`));
+      li.appendChild(dateSpan);
+
+      li.setAttribute("class", "value");
+
+      li.style.fontWeight = "bold";
+      li.style.fontSize = "21px";
+      editBtn.style.fontSize = "14px";
+      deleteBtn.style.fontSize = "14px";
+      editBtn.style.backgroundColor = "yellow";
+      deleteBtn.style.backgroundColor = "red";
+      li.appendChild(deleteBtn);
+      li.appendChild(editBtn);
+      list.appendChild(li);
+    }
+
+    let logout = document.querySelector("#logout");
+    logout.style.display = "initial";
+
+    let userNameParagrah = document.querySelector("#userName");
+    let userName = res.data.name;
+    userNameParagrah.innerText = "Welcome " + userName;
+
+    userNameParagrah.style.visibility = "visible";
+
+    let paginationButtons = document.querySelectorAll(".paginationbtn");
+
+    for (let each of paginationButtons) {
+      each.addEventListener("click", (e) => {
+        e.preventDefault();
+               let pageNumber = e.target.innerText;
+        expensesPagination(token, pageNumber)
+          .then((res) => {
+            let data = res.data.paginatedExpenses;
+            let ol = document.querySelector("#detailsList");
+            ol.innerHTML = "";
+
+            data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+            for (let each of data) {
+              let x = each.expenseItem.toUpperCase();
+              let y = each.expensePrice;
+
+              let createdAt = new Date(each.createdAt);
+              let date = createdAt.toLocaleDateString();
+
+              let editBtn = document.createElement("button");
+              let deleteBtn = document.createElement("button");
+
+              editBtn.appendChild(document.createTextNode("EDIT"));
+              deleteBtn.appendChild(document.createTextNode("DETELE"));
+              editBtn.setAttribute("class", "edit");
+              deleteBtn.setAttribute("class", "delete");
+              editBtn.style.float = "right";
+              deleteBtn.style.float = "right";
+
+              let li = document.createElement("li");
+              let span = document.createElement("span");
+              let span2 = document.createElement("span");
+              let dateSpan = document.createElement("span");
+
+              li.appendChild(document.createTextNode("Expense :  "));
+              span.appendChild(document.createTextNode(x));
+              li.appendChild(span);
+              li.appendChild(document.createTextNode("        Price :  "));
+              span2.appendChild(document.createTextNode(y));
+              li.appendChild(span2);
+              li.appendChild(document.createTextNode("    Date :  "));
+              dateSpan.appendChild(document.createTextNode(` ${date}`));
+              li.appendChild(dateSpan);
+
+              li.setAttribute("class", "value");
+
+              li.style.fontWeight = "bold";
+              li.style.fontSize = "21px";
+              editBtn.style.fontSize = "14px";
+              deleteBtn.style.fontSize = "14px";
+              editBtn.style.backgroundColor = "yellow";
+              deleteBtn.style.backgroundColor = "red";
+              li.appendChild(deleteBtn);
+              li.appendChild(editBtn);
+              list.appendChild(li);
+            }
+            list.scrollIntoView({behavior:"instant",block:"start"})
+
+            fetchData(token)
+    .then((res) => {
+      details.email = res.data.email;
+
+      let data = res.data.data.result;
+  
+      data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  
+      for (let each of data) {
+        let x = each.expenseItem.toUpperCase();
+        let y = each.expensePrice;
+  
+        let createdAt = new Date(each.createdAt);
+        let date = createdAt.toLocaleDateString();
+  
+        totalExpense += y;
+        let editBtn = document.createElement("button");
+        let deleteBtn = document.createElement("button");
+  
+        editBtn.appendChild(document.createTextNode("EDIT"));
+        deleteBtn.appendChild(document.createTextNode("DETELE"));
+        editBtn.setAttribute("class", "edit");
+        deleteBtn.setAttribute("class", "delete");
+        editBtn.style.float = "right";
+        deleteBtn.style.float = "right";
+  
+        let li = document.createElement("li");
+        li.style.display = "none";
+        let span = document.createElement("span");
+        let span2 = document.createElement("span");
+        let dateSpan = document.createElement("span");
+  
+        li.appendChild(document.createTextNode("Expense Item :  "));
+        span.appendChild(document.createTextNode(x));
+        li.appendChild(span);
+        li.appendChild(document.createTextNode("        Price :  "));
+        span2.appendChild(document.createTextNode(y));
+        li.appendChild(span2);
+        li.appendChild(document.createTextNode("    Date :  "));
+        dateSpan.appendChild(document.createTextNode(` ${date}`));
+        li.appendChild(dateSpan);
+  
+        li.setAttribute("class", "value");
+  
+        li.style.fontWeight = "bold";
+        li.style.fontSize = "21px";
+        editBtn.style.fontSize = "14px";
+        deleteBtn.style.fontSize = "14px";
+        editBtn.style.backgroundColor = "yellow";
+        deleteBtn.style.backgroundColor = "red";
+        li.appendChild(deleteBtn);
+        li.appendChild(editBtn);
+        list.appendChild(li);
+      }
+  
+      hiddenElements = document.querySelectorAll('.value[style*="display: none"]');
+  
+  
+    })
+    .catch((err) => {});
+
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      });
+    }
+        });
+      });
 
       let indexofItem = localStorageKey.indexOf(itemName);
       ol.removeChild(li);
@@ -520,30 +1120,46 @@ document.addEventListener("DOMContentLoaded", (e) => {
     }
   });
 
-  function filter(e) {
-    let del = document.querySelectorAll(".delete");
-    let ol = document.querySelectorAll(".value");
 
-    for (let each of ol) {
-      let result = each.children[0].innerText.toLowerCase();
-      let x = e.target.value[0] || "";
-      if (result[0] !== x.toLowerCase()) {
-        if (x === "") {
-          each.style.display = "unset";
-          for (let each of del) {
-            each.style.display = "unset";
-          }
-        } else {
-          each.style.display = "none";
+  function filter(e) {
+    let x = e.target.value.toLowerCase() || "" ;
+    if(x==""){
+      let paginationButton=document.querySelectorAll("#paginationButton");
+      e.target.blur()
+      for(let each of paginationButton){
+        if(each.textContent==="1"){
+             each.click();
+             break;
+             
         }
-      } else if (result.indexOf(e.target.value.toLowerCase()) == -1) {
-        each.style.display = "none";
-      } else {
-        each.style.display = "block";
       }
+      
+    }
+    list.scrollIntoView({behavior:"smooth",block:"start"})
+
+    for (let each of hiddenElements) {
+      let result = each.children[0].innerText.toLowerCase();
+
+      let x = e.target.value.toLowerCase() || "" ;
+
+      
+       if(result[0]===x[0]){
+         if(result.indexOf(x)!=-1){
+          each.style.display="block"
+        }else{
+           each.style.display="none"
+        }
+      }
+
     }
   }
+  search.addEventListener("click",()=>{
+    const visibleElements = document.querySelectorAll('.value:not([style*="display: none"])')
+    for(let each of visibleElements){
+      each.remove()
+    }
 
+  })
   search.addEventListener("keyup", filter);
 
   let razorPayBtn = document.querySelector("#razorPay");
@@ -601,7 +1217,6 @@ document.addEventListener("DOMContentLoaded", (e) => {
   p.setAttribute("id", "headingLeaderboard");
 
   leaderBoardDiv.insertBefore(p, leaderBoardCloseBtn.nextElementSibling);
-
   let logout = document.querySelector("#logout");
 
   logout.addEventListener("click", (e) => {
@@ -613,4 +1228,15 @@ document.addEventListener("DOMContentLoaded", (e) => {
   expenseReport.addEventListener("click", (e) => {
     window.location.href = "../../views/expenseReport.html";
   });
+
+  // s.addEventListener("blur",()=>{
+  //   let paginationButton=document.querySelectorAll("#paginationButton");
+  //     for(let each of paginationButton){
+  //       if(each.textContent==="1"){
+  //            each.click();
+  //            break;
+             
+  //       }
+  //     }
+  // })
 });

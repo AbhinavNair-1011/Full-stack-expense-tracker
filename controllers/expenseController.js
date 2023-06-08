@@ -120,7 +120,44 @@ let downloadExpenses = async (req, res, next) => {
       errorMsg: err
     });
   }
+
 };
+
+let expensesPagination=async (req,res,next)=>{
+  try{
+    let totalCount= await expenses.count({where:{userId:req.userDetails.userId}});
+    let limit=11;
+    let totalPageCount=Math.ceil(totalCount/limit);    
+    let pageNumber= req.query.number ?? 1;
+    let offset= (pageNumber-1)*limit
+
+    let paginatedExpenses= await expenses.findAll({where:{
+          userId:req.userDetails.userId
+    }
+  ,
+  limit:limit,
+  offset:offset,
+  order:[["createdAt","DESC"]]
+})
+
+ return res.json({
+  status:"successfull",
+  totalPageCount:totalPageCount,
+  paginatedExpenses:paginatedExpenses,
+  email: req.userDetails.userEmail,
+  name: req.userDetails.userName
+ })
+  }catch(err){
+    console.log(err)
+return res.json({
+  status:"failed"
+})
+  }
+
+}
+
+
+
 module.exports={
     fetchData,
     fetchData,
@@ -128,5 +165,6 @@ module.exports={
     updateData,
     deleteData,
     fetchLeaderboard,
-   downloadExpenses
+   downloadExpenses,
+   expensesPagination
 }
