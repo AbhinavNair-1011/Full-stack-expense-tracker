@@ -1,9 +1,7 @@
 const { expenses, Data } = require("../models/expenses");
 
-
 let fetchData = async (req, res, next) => {
   try {
-
     let result = await Data.fetchAll(req.userDetails.userEmail);
 
     return res.status(200).json({
@@ -21,7 +19,6 @@ let fetchData = async (req, res, next) => {
     });
   }
 };
-
 
 let addData = async (req, res, next) => {
   try {
@@ -45,7 +42,6 @@ let addData = async (req, res, next) => {
     });
   }
 };
-
 
 let updateData = async (req, res, next) => {
   try {
@@ -92,7 +88,7 @@ let deleteData = async (req, res, next) => {
 };
 
 let fetchLeaderboard = async (req, res, next) => {
-   try {
+  try {
     let result = await Data.fetchLeaderboard();
     return res.status(200).json({ result });
   } catch (err) {
@@ -109,62 +105,70 @@ let downloadExpenses = async (req, res, next) => {
     let id = req.userDetails.userId;
 
     let result = await Data.downloadExpense(email, id);
-    
+
     return res.json({
       status: "success",
-      data: result
+      data: result,
     });
   } catch (err) {
     return res.json({
       status: "failed",
-      errorMsg: err
+      errorMsg: err,
     });
   }
-
 };
 
-let expensesPagination=async (req,res,next)=>{
-  try{
-    let totalCount= await expenses.count({where:{userId:req.userDetails.userId}});
-    let limit=11;
-    let totalPageCount=Math.ceil(totalCount/limit);    
-    let pageNumber= req.query.number ?? 1;
-    let offset= (pageNumber-1)*limit
-
-    let paginatedExpenses= await expenses.findAll({where:{
-          userId:req.userDetails.userId
+let expensesPagination = async (req, res, next) => {
+  try {
+    let totalCount = await expenses.count({
+      where: { userId: req.userDetails.userId },
+    });
+    let limit;
+    if (req.query.rowNumber !== undefined) {
+      limit = parseInt(req.query.rowNumber);
+    } else {
+      limit = 10;
     }
-  ,
-  limit:limit,
-  offset:offset,
-  order:[["createdAt","DESC"]]
-})
+    let pageNumber;
+    if (req.query.number !== undefined) {
+      pageNumber = parseInt(req.query.number);
+    } else {
+      pageNumber = 1;
+    }
+    let totalPageCount = Math.ceil(totalCount / limit);
+    let offset = (pageNumber - 1) * limit;
+    let paginatedExpenses = await expenses.findAll({
+      where: {
+        userId: req.userDetails.userId,
+      },
+      limit: limit,
+      offset: offset,
+      order: [["createdAt", "DESC"]],
+    });
 
- return res.json({
-  status:"successfull",
-  totalPageCount:totalPageCount,
-  paginatedExpenses:paginatedExpenses,
-  email: req.userDetails.userEmail,
-  name: req.userDetails.userName
- })
-  }catch(err){
-    console.log(err)
-return res.json({
-  status:"failed"
-})
+    return res.json({
+      status: "successfull",
+      totalPageCount: totalPageCount,
+      paginatedExpenses: paginatedExpenses,
+      email: req.userDetails.userEmail,
+      name: req.userDetails.userName,
+      currentPageNumber: pageNumber,
+    });
+  } catch (err) {
+    console.log(err);
+    return res.json({
+      status: "failed",
+    });
   }
+};
 
-}
-
-
-
-module.exports={
-    fetchData,
-    fetchData,
-    addData,
-    updateData,
-    deleteData,
-    fetchLeaderboard,
-   downloadExpenses,
-   expensesPagination
-}
+module.exports = {
+  fetchData,
+  fetchData,
+  addData,
+  updateData,
+  deleteData,
+  fetchLeaderboard,
+  downloadExpenses,
+  expensesPagination,
+};

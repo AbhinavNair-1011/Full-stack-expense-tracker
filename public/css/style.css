@@ -51,7 +51,10 @@ height: 27;
   font-size:15px;
   background-color: lightslategray;
 }
-
+.selected{
+  background-color: rgb(1, 36, 36)  !important;
+  margin-top:1.5px;
+}
 
 #premiumMember {
   display: flex;
@@ -138,6 +141,22 @@ tr {
 }
 #inputSectionDiv:hover {
   box-shadow: 0 0 7px rgb(15, 252, 240);
+}
+#rowsWrap{
+  display:flex;
+  height:25px;
+  padding-left:15px;
+  /* justify-content: center; */
+}
+#rowParagraph{
+  color:white;
+}
+#rows{
+  height:25px;
+  margin-left:5px;
+  width:45px;
+  background-color: black;
+  color:white;
 }
 .edit,
 .delete {
@@ -239,8 +258,8 @@ span {
 #paginationButton{
   background-color: #33c6c69e;
   color:white;
-  width:29px;
-  height:20px;
+  width:33px;
+  height:24px;
   font-size: 10px;
 }
 
@@ -252,7 +271,7 @@ span {
 }
 #search {
   background-color: rgba(0, 255, 255, 0.465);
-  margin-bottom: 15px;
+  /* margin-bottom: 15px; */
   color: white;
   text-align: center;
   font-weight: bold;
